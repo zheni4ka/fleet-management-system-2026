@@ -1,0 +1,6 @@
+@transport_logistic_management_2026_HostAddress = http://localhost:5196
+
+GET {{transport_logistic_management_2026_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
