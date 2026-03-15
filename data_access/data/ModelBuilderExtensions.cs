@@ -1,0 +1,15 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace data_access.data
+{
+    public static class ModelBuilderExtensions
+    {
+        public static void SeedData(this ModelBuilder builder)
+        {
+            
+        }
+    }
+}

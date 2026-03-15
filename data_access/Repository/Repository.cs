@@ -1,0 +1,77 @@
+﻿using business_logic.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using Ardalis.Specification;
+using data_access.data;
+using Ardalis.Specification.EntityFrameworkCore;
+
+namespace data_access.Repository
+{
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    {
+        internal TLMDbContext context;
+        internal DbSet<TEntity> dbSet;
+
+        public Repository(TLMDbContext context)
+        {
+            this.context = context;
+            this.dbSet = context.Set<TEntity>();
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            return dbSet.ToList();
+        }
+
+        public virtual TEntity GetById(object id)
+        {
+            return dbSet.Find(id);
+        }
+
+        public virtual void Insert(TEntity entity)
+        {
+            dbSet.Add(entity);
+        }
+
+        public virtual void Delete(object id)
+        {
+            TEntity entityToDelete = dbSet.Find(id);
+            Delete(entityToDelete);
+        }
+
+        public virtual void Delete(TEntity entityToDelete)
+        {
+            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            {
+                dbSet.Attach(entityToDelete);
+            }
+            dbSet.Remove(entityToDelete);
+        }
+
+        public virtual void Update(TEntity entityToUpdate)
+        {
+            dbSet.Attach(entityToUpdate);
+            context.Entry(entityToUpdate).State = EntityState.Modified;
+        }
+
+        public void Save()
+        {
+            context.SaveChanges();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetListBySpec(ISpecification<TEntity> specification)
+        {
+            return await ApplySpecification(specification).ToListAsync();
+        }
+
+        public async Task<TEntity?> GetItemBySpec(ISpecification<TEntity> specification)
+        {
+            return await ApplySpecification(specification).FirstOrDefaultAsync();
+        }
+
+        private IQueryable<TEntity> ApplySpecification(ISpecification<TEntity> specification)
+        {
+            var evaluator = new SpecificationEvaluator();
+            return evaluator.GetQuery(dbSet, specification);
+        }
+    }
+}

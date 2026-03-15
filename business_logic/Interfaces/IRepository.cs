@@ -1,0 +1,20 @@
+﻿using Ardalis.Specification;
+
+namespace business_logic.Interfaces
+{
+    public interface IRepository<TEntity> where TEntity : class
+    {
+        IEnumerable<TEntity> GetAll();
+        TEntity GetById(object id);
+        void Insert(TEntity entity);
+        void Delete(object id);
+        void Delete(TEntity entityToDelete);
+        void Update(TEntity entityToUpdate);
+            
+
+        public Task<TEntity?> GetItemBySpec(ISpecification<TEntity> specification);
+        public Task<IEnumerable<TEntity>> GetListBySpec(ISpecification<TEntity> specification);
+
+        void Save();
+    }
+}
