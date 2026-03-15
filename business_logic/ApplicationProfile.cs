@@ -15,6 +15,10 @@ namespace business_logic
             CreateMap<Driver, DriverDTO>().ReverseMap();
             CreateMap<Driver, CreateDriverModel>().ReverseMap();
             CreateMap<Driver, EditDriverModel>().ReverseMap();
+
+            CreateMap<Auto, AutoDTO>().ReverseMap();
+            CreateMap<Auto, CreateAutoModel>().ReverseMap();
+            CreateMap<Auto, EditAutoModel>().ReverseMap();
         }
     }
 }

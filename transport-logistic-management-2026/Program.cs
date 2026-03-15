@@ -1,6 +1,7 @@
-using Scalar.AspNetCore;
 using business_logic;
 using data_access;
+using Scalar.AspNetCore;
+using System.Text.Json.Serialization;
 
 namespace transport_logistic_management_2026
 {
@@ -12,7 +13,11 @@ namespace transport_logistic_management_2026
             var connectionString = builder.Configuration.GetConnectionString("connectionString");
 
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            }); 
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddBusinessLogicServices();
             builder.Services.AddDataAccessServices(connectionString);

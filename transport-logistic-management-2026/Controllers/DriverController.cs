@@ -23,26 +23,23 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public IActionResult DeleteDriver(int id)
+        public IActionResult DeleteDriver([FromRoute] int id)
         {
-            _driverService.Delete(id);
-            return Ok();
+            return Ok(_driverService.Delete(id));
         }
 
 
         [HttpGet("all")]
         public IActionResult GetAllDrivers()
         {
-            _driverService.GetAll();
-            return Ok();
+            return Ok(_driverService.GetAll());
         }
 
 
         [HttpGet("{id:int}")]
-        public IActionResult GetDriverById(int id)
+        public IActionResult GetDriverById([FromRoute] int id)
         {
-            _driverService.Get(id);
-            return Ok();
+            return Ok(_driverService.Get(id));
         }
     }
 }

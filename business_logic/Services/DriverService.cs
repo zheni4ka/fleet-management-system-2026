@@ -2,6 +2,7 @@
 using business_logic.DTOs;
 using business_logic.Entities;
 using business_logic.Interfaces;
+using business_logic.Specifications;
 
 namespace business_logic.Services
 {
@@ -23,7 +24,7 @@ namespace business_logic.Services
 
         public Task Delete(int id)
         {
-            var driver = driverR.GetById(id);
+            var driver = Get(id);
             if (driver == null)
             {
                 throw new Exception("Driver not found");
@@ -33,21 +34,15 @@ namespace business_logic.Services
         }
         public IEnumerable<DriverDTO> GetAll()
         {
-            return mapper.Map<IEnumerable<Driver>, IEnumerable<DriverDTO>>(driverR.GetAll());
+            return mapper.Map<List<DriverDTO>>(driverR.GetAll());
         }
-        public Task<DriverDTO> Get(int id)
+        public async Task<DriverDTO> Get(int id)
         {
-            var driver = driverR.GetById(id);
-            if (driver == null)
-            {
-                throw new Exception("Driver not found");
-            }
-            return Task.FromResult(mapper.Map<DriverDTO>(driver));
-        }
-        public Task<IEnumerable<DriverDTO>> Get(IEnumerable<int> ids)
-        {
-            var drivers = driverR.GetAll().Where(d => ids.Contains(d.Id));
-            return Task.FromResult(mapper.Map<IEnumerable<Driver>, IEnumerable<DriverDTO>>(drivers));
+            var driver = await driverR.GetItemBySpec(new DriverSpecs.ById(id));
+
+            if (driver == null) throw new Exception("Driver not found");
+           
+            return mapper.Map<DriverDTO>(driver);
         }
     }
 }
