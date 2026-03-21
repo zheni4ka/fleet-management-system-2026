@@ -23,6 +23,7 @@ namespace business_logic
         {
             services.AddScoped<IDriverService, DriverService>();
             services.AddScoped<IAutoService, AutoService>();
+            services.AddScoped<IRouteService, RouteService>();
         }
     }
 }

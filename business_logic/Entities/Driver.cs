@@ -7,5 +7,6 @@
         public string Surname { get; set; }
         public string Patronymic { get; set; }
         public string LicenseNumber { get; set; }
+        public IEnumerable<Route> Routes { get; set; }
     }
 }

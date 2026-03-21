@@ -1,7 +1,4 @@
 ﻿using business_logic.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace business_logic.Interfaces
 {

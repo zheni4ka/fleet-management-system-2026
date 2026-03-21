@@ -1,9 +1,7 @@
 ﻿using business_logic.Interfaces;
 using data_access.Repository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using data_access.data;
-using Microsoft.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 namespace data_access

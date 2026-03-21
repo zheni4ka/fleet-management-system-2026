@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using business_logic.Entities;
 using business_logic.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace business_logic
 {
@@ -18,6 +15,10 @@ namespace business_logic
             CreateMap<Auto, AutoDTO>().ReverseMap();
             CreateMap<Auto, CreateAutoModel>().ReverseMap();
             CreateMap<Auto, EditAutoModel>().ReverseMap();
+
+            CreateMap<Route, RouteDTO>().ReverseMap();
+            CreateMap<Route, CreateRouteModel>().ReverseMap();
+
         }
     }
 }

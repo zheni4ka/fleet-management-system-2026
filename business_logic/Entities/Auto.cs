@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace business_logic.Entities
 {
     public class Auto
@@ -12,5 +9,6 @@ namespace business_logic.Entities
         public string Color { get; set; }
         public string Number { get; set; }
         public double LoadCarryingCapacity { get; set; }
+        public IEnumerable<Route> Routes { get; set; }
     }
 }
