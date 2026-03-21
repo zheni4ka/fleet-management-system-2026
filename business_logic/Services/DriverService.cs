@@ -22,20 +22,21 @@ namespace business_logic.Services
             driverR.Save();
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
-            var driver = Get(id);
+            var driver = driverR.GetById(id);
             if (driver == null)
             {
                 throw new Exception("Driver not found");
             }
-            driverR.Delete(driver);
-            return Task.CompletedTask;
+            driverR.Delete(id);
+            driverR.Save();
         }
         public IEnumerable<DriverDTO> GetAll()
         {
             return mapper.Map<List<DriverDTO>>(driverR.GetAll());
         }
+
         public async Task<DriverDTO> Get(int id)
         {
             var driver = await driverR.GetItemBySpec(new DriverSpecs.ById(id));
@@ -43,6 +44,12 @@ namespace business_logic.Services
             if (driver == null) throw new Exception("Driver not found");
            
             return mapper.Map<DriverDTO>(driver);
+        }
+
+        public async Task Edit(EditDriverModel model)
+        {
+            driverR.Update(mapper.Map<Driver>(model));
+            driverR.Save();
         }
     }
 }

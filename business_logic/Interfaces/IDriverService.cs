@@ -8,6 +8,6 @@ namespace business_logic.Interfaces
         public Task<DriverDTO> Get(int id);
         public IEnumerable<DriverDTO> GetAll();
         public Task Delete(int id);
-        //public Task Edit(EditAutoModel model);
+        public Task Edit(EditDriverModel model);
     }
 }

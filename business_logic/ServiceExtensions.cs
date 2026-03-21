@@ -22,6 +22,7 @@ namespace business_logic
         public static void AddCustomServices(this IServiceCollection services)
         {
             services.AddScoped<IDriverService, DriverService>();
+            services.AddScoped<IAutoService, AutoService>();
         }
     }
 }

@@ -2,6 +2,7 @@
 using business_logic.DTOs;
 using business_logic.Entities;
 using business_logic.Interfaces;
+using business_logic.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,11 +21,11 @@ namespace business_logic.Services
 
         public void Create(CreateAutoModel autoModel)
         {
-            var auto = mapper.Map<Auto>(autoModel);
-            autoR.Insert(auto);
+            autoR.Insert(mapper.Map<Auto>(autoModel));
+            autoR.Save();
         }
 
-        public Task Delete(int id)
+        public async Task Delete(int id)
         {
             var auto = autoR.GetById(id);
             if (auto == null)
@@ -32,13 +33,28 @@ namespace business_logic.Services
                 throw new Exception("Auto not found");
             }
             autoR.Delete(auto);
-            return Task.CompletedTask;
+            autoR.Save();
         }
 
-
-        public Task<AutoDTO> Get(int id)
+        public async Task Edit(EditAutoModel model)
         {
-            throw new NotImplementedException();
+            autoR.Update(mapper.Map<Auto>(model));
+            autoR.Save();
+        }
+
+        public async Task<AutoDTO> Get(int id)
+        {
+            var auto = await autoR.GetItemBySpec(new AutoSpecs.ById(id));
+
+            if (auto == null) throw new Exception("Auto not found");
+
+            return mapper.Map<AutoDTO>(auto);
+        }
+
+        public IEnumerable<AutoDTO> GetAll()
+        {
+            var autos = autoR.GetAll();
+            return mapper.Map<IEnumerable<AutoDTO>>(autos);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using data_access.data;
 
@@ -11,9 +12,11 @@ using data_access.data;
 namespace data_access.Migrations
 {
     [DbContext(typeof(TLMDbContext))]
-    partial class TLMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260321140845_AutoTable")]
+    partial class AutoTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -232,8 +235,8 @@ namespace data_access.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("LoadCarryingCapacity")
-                        .HasColumnType("float");
+                    b.Property<decimal>("LoadCarryingCapacity")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Model")
                         .IsRequired()

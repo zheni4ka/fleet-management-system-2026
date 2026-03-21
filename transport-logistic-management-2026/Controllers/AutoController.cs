@@ -1,0 +1,51 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using business_logic.Interfaces;
+using business_logic.DTOs;
+
+namespace transport_logistic_management_2026.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class AutoController : Controller
+    {
+        private readonly IAutoService _autoService;
+
+        public AutoController(IAutoService autoService)
+        {
+            _autoService = autoService;
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromForm] CreateAutoModel auto)
+        {
+            _autoService.Create(auto);
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            await _autoService.Delete(id);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromForm] EditAutoModel model)
+        {
+            await _autoService.Edit(model);
+            return Ok();
+        }
+
+        [HttpGet("all")]
+        public IActionResult GetAll()
+        {
+            return Ok(_autoService.GetAll());
+        }
+
+        [HttpGet("{id:int}")]
+        public IActionResult Get(int id)
+        {
+            return Ok(_autoService.Get(id));
+        }
+    }
+}

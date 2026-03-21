@@ -10,6 +10,6 @@ namespace business_logic.DTOs
         public string Model { get; set; }
         public string Color { get; set; }
         public string Number { get; set; }
-        public decimal LoadCarryingCapacity { get; set; }
+        public double LoadCarryingCapacity { get; set; }
     }
 }
