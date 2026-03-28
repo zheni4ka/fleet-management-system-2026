@@ -19,18 +19,26 @@ namespace business_logic.Specifications
                 Query.OrderBy(r => r.Id);
             }
         }
-         public class ByStart : Specification<Route>
+        public class ByStart : Specification<Route>
         {
             public ByStart(string startPoint)
             {
                 Query.Where(r => r.Start == startPoint);
             }
         }
-         public class ByDestination : Specification<Route>
+        public class ByDestination : Specification<Route>
         {
             public ByDestination(string endPoint)
             {
                 Query.Where(r => r.Destination == endPoint);
+            }
+        }
+
+        public class ByDriverId : Specification<Route>
+        {
+            public ByDriverId(int driverId)
+            {
+                Query.Where(r => r.DriverId == driverId);
             }
         }
     }

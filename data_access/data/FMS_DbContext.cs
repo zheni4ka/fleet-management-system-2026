@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace data_access.data
 {
-    public class TLMDbContext : IdentityDbContext
+    public class FMS_DbContext : IdentityDbContext
     {
-        public TLMDbContext(DbContextOptions opt) : base(opt) { }
+        public FMS_DbContext(DbContextOptions opt) : base(opt) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

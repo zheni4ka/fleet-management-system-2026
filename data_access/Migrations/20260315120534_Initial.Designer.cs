@@ -11,7 +11,7 @@ using data_access.data;
 
 namespace data_access.Migrations
 {
-    [DbContext(typeof(TLMDbContext))]
+    [DbContext(typeof(FMS_DbContext))]
     [Migration("20260315120534_Initial")]
     partial class Initial
     {

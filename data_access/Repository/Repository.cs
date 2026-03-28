@@ -8,10 +8,10 @@ namespace data_access.Repository
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        internal TLMDbContext context;
+        internal FMS_DbContext context;
         internal DbSet<TEntity> dbSet;
 
-        public Repository(TLMDbContext context)
+        public Repository(FMS_DbContext context)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();

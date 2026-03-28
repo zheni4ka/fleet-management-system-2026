@@ -8,7 +8,8 @@ namespace business_logic.Entities
         public string Model { get; set; }
         public string Color { get; set; }
         public string Number { get; set; }
-        public double LoadCarryingCapacity { get; set; }
+        public double Capacity { get; set; }
         public IEnumerable<Route> Routes { get; set; }
+        public IEnumerable<AutoMaintenance> Services { get; set; }
     }
 }

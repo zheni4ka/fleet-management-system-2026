@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using data_access.data;
 
@@ -11,9 +12,11 @@ using data_access.data;
 namespace data_access.Migrations
 {
     [DbContext(typeof(FMS_DbContext))]
-    partial class TLMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260327191246_rename")]
+    partial class rename
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,12 +231,12 @@ namespace data_access.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<double>("Capacity")
-                        .HasColumnType("float");
-
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("LoadCarryingCapacity")
+                        .HasColumnType("float");
 
                     b.Property<string>("Model")
                         .IsRequired()
@@ -250,35 +253,6 @@ namespace data_access.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Autos", (string)null);
-                });
-
-            modelBuilder.Entity("business_logic.Entities.AutoMaintenance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AutoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ServiceDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AutoId");
-
-                    b.ToTable("AutoMaintenance", (string)null);
                 });
 
             modelBuilder.Entity("business_logic.Entities.Driver", b =>
@@ -398,17 +372,6 @@ namespace data_access.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("business_logic.Entities.AutoMaintenance", b =>
-                {
-                    b.HasOne("business_logic.Entities.Auto", "Auto")
-                        .WithMany("Services")
-                        .HasForeignKey("AutoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Auto");
-                });
-
             modelBuilder.Entity("business_logic.Entities.Route", b =>
                 {
                     b.HasOne("business_logic.Entities.Auto", "Auto")
@@ -431,8 +394,6 @@ namespace data_access.Migrations
             modelBuilder.Entity("business_logic.Entities.Auto", b =>
                 {
                     b.Navigation("Routes");
-
-                    b.Navigation("Services");
                 });
 
             modelBuilder.Entity("business_logic.Entities.Driver", b =>

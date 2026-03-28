@@ -14,11 +14,12 @@ namespace data_access.Configs
 
             builder.HasOne(r => r.Auto)
                    .WithMany(a => a.Routes)
-                   .HasForeignKey(r => r.AutoId);
+                   .HasForeignKey(r => r.AutoId).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(r => r.Driver)
                 .WithMany(a => a.Routes)
-                .HasForeignKey(r => r.DriverId);
+                .HasForeignKey(r => r.DriverId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

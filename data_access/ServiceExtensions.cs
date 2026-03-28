@@ -15,7 +15,7 @@ namespace data_access
         }
         public static void AddDbContext(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<TLMDbContext>(opts => opts.UseSqlServer(connectionString));
+            services.AddDbContext<FMS_DbContext>(opts => opts.UseSqlServer(connectionString));
         }
 
         public static void AddRepositories(this IServiceCollection services)

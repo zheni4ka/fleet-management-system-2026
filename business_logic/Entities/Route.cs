@@ -9,9 +9,9 @@ namespace business_logic.Entities
         public string Destination { get; set; }
         public DateTime DepartureTime { get; set; }
         public DateTime ArrivalTime { get; set; }
-        public int AutoId { get; set; }
-        public int DriverId { get; set; }
         public Auto Auto { get; set; }
+        public int AutoId { get; set; }
         public Driver Driver { get; set; }
+        public int DriverId { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 using business_logic.Entities;
 
 namespace business_logic.Specifications
@@ -29,6 +26,22 @@ namespace business_logic.Specifications
             public All()
             {
                 Query.OrderBy(a => a.Name);
+            }
+        }
+
+        public class CapacityMoreThan : Specification<Auto>
+        {
+            public CapacityMoreThan(double value)
+            {
+                Query.Where(a => a.Capacity >= value);
+            }
+        }
+
+        public class CapacityLessThan : Specification<Auto>
+        {
+            public CapacityLessThan(double value)
+            {
+                Query.Where(a => a.Capacity <= value);
             }
         }
 
