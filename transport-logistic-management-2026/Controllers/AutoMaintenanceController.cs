@@ -35,5 +35,10 @@ namespace transport_logistic_management_2026.Controllers
             return Ok(_amservice.GetAll());
         }
 
+        [HttpGet("auto/{id:int}")]
+        public async Task<IActionResult> GetByAutoId([FromRoute] int id)
+        {
+            return Ok(await _amservice.GetByAutoId(id));
+        }
     }
 }

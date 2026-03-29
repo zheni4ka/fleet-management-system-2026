@@ -3,7 +3,7 @@ using business_logic.Entities;
 
 namespace business_logic.Specifications
 {
-    public class RouteSpecs : Specification<Route>
+    public class RouteSpecs
     {
         public class ById : Specification<Route>
         {

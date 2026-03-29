@@ -3,7 +3,7 @@ using business_logic.Entities;
 
 namespace business_logic.Specifications
 {
-    public class AutoMaintenanceSpecs : Specification<AutoMaintenance>
+    public class AutoMaintenanceSpecs
     {
         public class ById : Specification<AutoMaintenance>
         {
@@ -26,6 +26,14 @@ namespace business_logic.Specifications
             public ByDate(DateTime date)
             {
                 Query.Where(am => am.ServiceDate.Date == date.Date);
+            }
+        }
+
+        public class ByAutoId : Specification<AutoMaintenance>
+        {
+            public ByAutoId(int autoId)
+            {
+                Query.Where(am => am.AutoId == autoId);
             }
         }
     }

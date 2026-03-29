@@ -3,7 +3,7 @@ using business_logic.Entities;
 
 namespace business_logic.Specifications
 {
-    public class AutoSpecs : Specification<Auto>
+    public class AutoSpecs
     {
         public class ById : Specification<Auto>
         {

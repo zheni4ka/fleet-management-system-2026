@@ -8,17 +8,17 @@ namespace business_logic.Services
 {
     public class DriverService : IDriverService
     {
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
         private readonly IRepository<Driver> driverR;
         public DriverService(IRepository<Driver> driverRs, IMapper mapper)
         {
             this.driverR = driverRs;
-            this.mapper = mapper;
+            this._mapper = mapper;
         }
 
         public void Create(CreateDriverModel driverModel)
         {
-            driverR.Insert(mapper.Map<Driver>(driverModel));
+            driverR.Insert(_mapper.Map<Driver>(driverModel));
             driverR.Save();
         }
 
@@ -34,7 +34,7 @@ namespace business_logic.Services
         }
         public IEnumerable<DriverDTO> GetAll()
         {
-            return mapper.Map<List<DriverDTO>>(driverR.GetAll());
+            return _mapper.Map<List<DriverDTO>>(driverR.GetAll());
         }
 
         public async Task<DriverDTO> Get(int id)
@@ -43,12 +43,12 @@ namespace business_logic.Services
 
             if (driver == null) throw new Exception("Driver not found");
            
-            return mapper.Map<DriverDTO>(driver);
+            return _mapper.Map<DriverDTO>(driver);
         }
 
         public async Task Edit(EditDriverModel model)
         {
-            driverR.Update(mapper.Map<Driver>(model));
+            driverR.Update(_mapper.Map<Driver>(model));
             driverR.Save();
         }
     }

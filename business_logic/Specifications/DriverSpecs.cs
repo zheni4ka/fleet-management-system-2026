@@ -3,7 +3,7 @@ using business_logic.Entities;
 
 namespace business_logic.Specifications
 {
-    public class DriverSpecs : Specification<Driver>
+    public class DriverSpecs
     {
         public class ById : Specification<Driver>
         {

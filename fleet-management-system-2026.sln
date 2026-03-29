@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.4.11612.150 stable
+VisualStudioVersion = 18.4.11612.150
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fleet-management-system-2024", "transport-logistic-management-2026\fleet-management-system-2024.csproj", "{16BC29F4-E9D8-4B1A-932C-F0A5E8CF5EA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fleet-management-system-2026", "transport-logistic-management-2026\fleet-management-system-2026.csproj", "{16BC29F4-E9D8-4B1A-932C-F0A5E8CF5EA1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "business_logic", "business_logic\business_logic.csproj", "{0BDE59A8-E52E-41F3-B1F3-392A4A9D9246}"
 EndProject

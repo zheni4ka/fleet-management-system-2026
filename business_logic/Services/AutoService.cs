@@ -9,16 +9,16 @@ namespace business_logic.Services
     public class AutoService : IAutoService
     {
         private readonly IRepository<Auto> autoR;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
         public AutoService(IRepository<Auto> autoR, IMapper mapper)
         {
             this.autoR = autoR;
-            this.mapper = mapper;
+            this._mapper = mapper;
         }
 
         public void Create(CreateAutoModel autoModel)
         {
-            autoR.Insert(mapper.Map<Auto>(autoModel));
+            autoR.Insert(_mapper.Map<Auto>(autoModel));
             autoR.Save();
         }
 
@@ -35,7 +35,7 @@ namespace business_logic.Services
 
         public async Task Edit(EditAutoModel model)
         {
-            autoR.Update(mapper.Map<Auto>(model));
+            autoR.Update(_mapper.Map<Auto>(model));
             autoR.Save();
         }
 
@@ -45,13 +45,13 @@ namespace business_logic.Services
 
             if (auto == null) throw new Exception("Auto not found");
 
-            return mapper.Map<AutoDTO>(auto);
+            return _mapper.Map<AutoDTO>(auto);
         }
 
         public IEnumerable<AutoDTO> GetAll()
         {
             var autos = autoR.GetAll();
-            return mapper.Map<IEnumerable<AutoDTO>>(autos);
+            return _mapper.Map<IEnumerable<AutoDTO>>(autos);
         }
     }
 }

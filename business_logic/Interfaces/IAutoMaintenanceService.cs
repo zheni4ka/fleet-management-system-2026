@@ -10,5 +10,6 @@ namespace business_logic.Interfaces
         public void Create(CreateAutoMaintenanceModel driverModel);
         public Task<AutoMaintenanceDTO> Get(int id);
         public IEnumerable<AutoMaintenanceDTO> GetAll();
+        public Task<IEnumerable<AutoMaintenanceDTO>> GetByAutoId(int id);
     }
 }

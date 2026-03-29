@@ -23,6 +23,15 @@ namespace business_logic.Services
             _amR.Save();
         }
 
+        public async Task<IEnumerable<AutoMaintenanceDTO>> GetByAutoId(int id)
+        {
+            var items = await _amR.GetListBySpec(new AutoMaintenanceSpecs.ByAutoId(id));
+
+            if (items == null) { throw new Exception("item not found"); }
+
+            return _mapper.Map<List<AutoMaintenanceDTO>>(items);
+        }
+
         public async Task<AutoMaintenanceDTO> Get(int id)
         {
             var item = await _amR.GetItemBySpec(new AutoMaintenanceSpecs.ById(id));
@@ -33,5 +42,6 @@ namespace business_logic.Services
         }
 
         public IEnumerable<AutoMaintenanceDTO> GetAll() { return _mapper.Map<IEnumerable<AutoMaintenanceDTO>>(_amR.GetAll()); }
+
     }
 }
