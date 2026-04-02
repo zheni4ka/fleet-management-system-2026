@@ -32,6 +32,7 @@ namespace business_logic.Services
             driverR.Delete(id);
             driverR.Save();
         }
+
         public IEnumerable<DriverDTO> GetAll()
         {
             return _mapper.Map<List<DriverDTO>>(driverR.GetAll());

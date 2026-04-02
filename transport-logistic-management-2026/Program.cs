@@ -31,6 +31,7 @@ namespace transport_logistic_management_2026
                 app.MapScalarApiReference();
             }
 
+
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

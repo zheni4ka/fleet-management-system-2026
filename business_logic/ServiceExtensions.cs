@@ -14,7 +14,7 @@ namespace business_logic
                 cfg.AddMaps(typeof(ApplicationProfile).Assembly);
             });
 
-            services.AddValidatorsFromAssembly(typeof(ServiceExtensions).Assembly);
+            services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddCustomServices();
         }
