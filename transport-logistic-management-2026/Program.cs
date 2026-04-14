@@ -20,7 +20,7 @@ namespace transport_logistic_management_2026
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddBusinessLogicServices();
-            builder.Services.AddDataAccessServices(connectionString);
+            builder.Services.AddDataAccessServices(connectionString);   
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
@@ -30,7 +30,6 @@ namespace transport_logistic_management_2026
                 app.MapOpenApi();
                 app.MapScalarApiReference();
             }
-
 
             app.UseHttpsRedirection();
 

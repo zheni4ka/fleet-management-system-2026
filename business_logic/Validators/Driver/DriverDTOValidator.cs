@@ -2,9 +2,9 @@
 using FluentValidation;
 namespace business_logic.Validators
 {
-    public class DriverValidator : AbstractValidator<Driver>
+    public class DriverDTOValidator : AbstractValidator<Driver>
     {
-        public DriverValidator()
+        public DriverDTOValidator()
         {
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Name is required.")

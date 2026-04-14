@@ -1,7 +1,6 @@
 ﻿using business_logic.DTOs;
 using business_logic.Interfaces;
-using business_logic.Services;
-using Microsoft.AspNetCore.Http;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace transport_logistic_management_2026.Controllers
@@ -11,14 +10,28 @@ namespace transport_logistic_management_2026.Controllers
     public class AutoMaintenanceController : Controller
     {
         private readonly IAutoMaintenanceService _amservice;
-        public AutoMaintenanceController(IAutoMaintenanceService amservice)
+        private readonly IValidator<CreateAutoMaintenanceModel> _createValidator;
+        public AutoMaintenanceController(IAutoMaintenanceService amservice, IValidator<CreateAutoMaintenanceModel> createValidator)
         {
             _amservice = amservice;
+            _createValidator = createValidator;
         }
 
         [HttpPost]
         public IActionResult Create([FromForm] CreateAutoMaintenanceModel model)
         {
+            var validationResult = _createValidator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                var errors = new ValidationProblemDetails(validationResult.ToDictionary())
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Validation Failed",
+                    Detail = "One or more validation errors occurred."
+                };
+                return BadRequest(errors);
+            }
+
             _amservice.Create(model);
             return Ok();
         }

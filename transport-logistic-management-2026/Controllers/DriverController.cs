@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using business_logic.Interfaces;
 using business_logic.DTOs;
+using FluentValidation;
 
 namespace transport_logistic_management_2026.Controllers
 {
@@ -9,15 +10,32 @@ namespace transport_logistic_management_2026.Controllers
     public class DriverController : Controller
     {
         private readonly IDriverService _driverService;
+        private readonly IValidator<CreateDriverModel> _createValidator;
+        private readonly IValidator<EditDriverModel> _editValidator;
 
-        public DriverController(IDriverService driverService)
+        public DriverController(IDriverService driverService, IValidator<CreateDriverModel> createValidator, IValidator<EditDriverModel> editValidator)
         {
             _driverService = driverService;
+            _createValidator = createValidator;
+            _editValidator = editValidator;
         }
 
         [HttpPost]
-        public IActionResult Create([FromForm] CreateDriverModel model)
+        public IActionResult Create([FromBody] CreateDriverModel model)
         {
+            var validationResult = _createValidator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                var errors = new ValidationProblemDetails(validationResult.ToDictionary())
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Validation Failed",
+                    Detail = "One or more validation errors occurred."
+                };
+
+                return BadRequest(errors);
+            }
+
             _driverService.Create(model);
             return Ok();
         }
@@ -30,8 +48,22 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Edit([FromForm] EditDriverModel model)
+        public async Task<IActionResult> Edit([FromBody] EditDriverModel model)
         {
+            var validationResult = _editValidator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                var errors = new ValidationProblemDetails(validationResult.ToDictionary())
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Validation Failed",
+                    Detail = "One or more validation errors occurred.",
+                    Instance = "/api/drivers"
+                };
+
+                return BadRequest(errors);
+            }
+
             await _driverService.Edit(model);
             return Ok();
         }

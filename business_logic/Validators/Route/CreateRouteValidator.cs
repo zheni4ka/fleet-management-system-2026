@@ -6,9 +6,9 @@ using System.Text;
 
 namespace business_logic.Validators
 {
-    public class RouteValidator : AbstractValidator<Route>
+    public class CreateRouteValidator : AbstractValidator<Route>
     {
-        public RouteValidator() 
+        public CreateRouteValidator() 
         {
             RuleFor(x => x.Start)
                 .NotEmpty()

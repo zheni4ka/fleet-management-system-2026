@@ -1,5 +1,7 @@
-﻿using business_logic.DTOs;
+﻿using Ardalis.Specification;
+using business_logic.DTOs;
 using business_logic.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace transport_logistic_management_2026.Controllers
@@ -9,10 +11,12 @@ namespace transport_logistic_management_2026.Controllers
     public class RouteController : Controller
     {
         private readonly IRouteService _routeService;
+        private readonly IValidator<CreateRouteModel> _createValidator;
 
-        public RouteController(IRouteService routeService)
+        public RouteController(IRouteService routeService, IValidator<CreateRouteModel> createValidator)
         {
             this._routeService = routeService;
+            this._createValidator = createValidator;
         }
 
         [HttpPost]

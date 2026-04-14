@@ -1,5 +1,4 @@
-﻿
-namespace business_logic.Entities
+﻿namespace business_logic.Entities
 {
     public class Auto
     {
