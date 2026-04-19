@@ -29,6 +29,7 @@ namespace transport_logistic_management_2026.Controllers
                     Title = "Validation Failed",
                     Detail = "One or more validation errors occurred."
                 };
+
                 return BadRequest(errors);
             }
 

@@ -5,7 +5,7 @@ namespace data_access.data
     {
         public static void SeedData(this ModelBuilder builder)
         {
-            
+            // initial seed is handled at runtime seeder (IdentitySeeder)
         }
     }
 }

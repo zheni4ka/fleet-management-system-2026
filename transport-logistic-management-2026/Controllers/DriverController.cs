@@ -57,8 +57,7 @@ namespace transport_logistic_management_2026.Controllers
                 {
                     Status = StatusCodes.Status400BadRequest,
                     Title = "Validation Failed",
-                    Detail = "One or more validation errors occurred.",
-                    Instance = "/api/drivers"
+                    Detail = "One or more validation errors occurred."
                 };
 
                 return BadRequest(errors);

@@ -3,6 +3,7 @@ using data_access.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using data_access.data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace data_access
 {
@@ -25,7 +26,15 @@ namespace data_access
 
         public static void AddIdentity(this IServiceCollection services)
         {
-
+            services.AddIdentity<IdentityUser, IdentityRole>(opts =>
+            {
+                opts.Password.RequireDigit = false;
+                opts.Password.RequiredLength = 6;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireUppercase = false;
+            })
+            .AddEntityFrameworkStores<FMS_DbContext>()
+            .AddDefaultTokenProviders();
         }
     }
 }
