@@ -1,1 +1,91 @@
 
+Fleet Management System (Транспортно-логістична система)
+Проєкт є випускною курсовою роботою, яка являє собою сучасне веб-рішення для автоматизації управління автопарком, обліку водіїв та оптимізації транспортної логістики. Серверна частина побудована на базі актуальної платформи .NET 10 з дотриманням принципів чистої архітектури (Clean Architecture), розділенням відповідальності та використанням сучасних патернів проєктування.
+
+🚀 Технологічний стек
+Backend (Цей репозиторій)
+Платформа: .NET 10.0 (ASP.NET Core Web API)
+
+База даних: Microsoft SQL Server
+
+ORM: Entity Framework Core 10.0 (підхід Code First з підтримкою міграцій)
+
+Автентифікація та авторизація: ASP.NET Core Identity
+
+Допоміжні бібліотеки:
+
+AutoMapper — для зручного мапінгу між сутностями та DTO.
+
+FluentValidation — для валідації вхідних даних моделей.
+
+Ardalis.Specification — реалізація патерну "Специфікація" для гнучкої фільтрації та побудови запитів до БД.
+
+Документація API: OpenAPI та інтерактивна документація Scalar (сучасна альтернатива Swagger/SwaggerUI).
+
+Frontend (В розробці)
+Фреймворк: Next.js / React
+
+Мова програмування: TypeScript
+
+🏗️ Архітектура проєкту
+Проєкт розділений на три логічні шари (проєкти в межах одного Solution):
+
+transport-logistic-management-2026 (API Layer)
+
+Вхідна точка застосунку (REST API контракти).
+
+Містить контроллери (DriverController) для обробки HTTP-запитів.
+
+Налаштування DI-контейнера, Middleware та конфігурацій.
+
+business_logic (Core / Business Logic Layer)
+
+Містить бізнес-моделі (Entities), інтерфейси сервісів та репозиторіїв.
+
+Реалізація бізнес-логіки (DriverService).
+
+DTO (Data Transfer Objects) та профілі мапінгу (AutoMapper).
+
+Специфікації для роботи з даними.
+
+data_access (Infrastructure / Data Access Layer)
+
+Контекст бази даних (TLMDbContext) на базі IdentityDbContext.
+
+Реалізація узагальненого репозиторію (Repository<T>).
+
+Конфігурації сутностей (Fluent API) та міграції.
+
+
+🛠️ Налаштування та запуск проєкту
+Передумови
+Встановлений .NET 10 SDK.
+
+Встановлений MS SQL Server (за замовчуванням налаштовано на роботу з (localdb)\mssqllocaldb).
+
+
+Кроки для запуску
+Клонуйте репозиторій:
+git clone https://github.com/your-username/fleet-management-system-2026.git
+cd fleet-management-system-2026
+
+
+Конфігурація бази даних:
+Перевірте рядок підключення у файлі transport-logistic-management-2026/appsettings.json:
+
+"ConnectionStrings": {
+  "connectionString": "Server=(localdb)\\mssqllocaldb;Database=TransportLogisticsDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+}
+
+
+Оновлення бази даних (застосування міграцій):
+У кореневій директорії виконайте команду:
+dotnet ef database update --project data_access --startup-project transport-logistic-management-2026
+
+Запуск веб-API:
+dotnet run --project transport-logistic-management-2026
+
+Після запуску застосунок буде доступний за адресою:
+
+HTTP: http://localhost:5196
+Інтерактивна документація API (Scalar): https://localhost:5196/scalar/v1 (працює у режимі Development).
