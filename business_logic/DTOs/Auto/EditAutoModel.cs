@@ -1,5 +1,7 @@
 ﻿
 
+using business_logic.Entities;
+
 namespace business_logic.DTOs
 { 
     public class EditAutoModel
@@ -10,5 +12,6 @@ namespace business_logic.DTOs
         public string Color { get; set; }
         public string Number { get; set; }
         public double Capacity { get; set; }
+        public AutoStatus Status { get; set; }
     }
 }

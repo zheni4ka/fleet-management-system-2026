@@ -53,5 +53,18 @@ namespace business_logic.Services
             var autos = autoR.GetAll();
             return _mapper.Map<IEnumerable<AutoDTO>>(autos);
         }
+
+        public async Task UpdateStatusAsync(int autoId, AutoStatus newStatus)
+        {
+            var auto = autoR.GetById(autoId);
+            if(auto == null)
+            {
+                throw new Exception("Auto not found");
+            }
+            auto.Status = newStatus;
+
+            autoR.Update(auto);
+            autoR.Save();
+        }
     }
 }

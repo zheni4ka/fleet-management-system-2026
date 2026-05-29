@@ -245,9 +245,17 @@ namespace data_access.Migrations
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Number")
+                        .IsUnique();
 
                     b.ToTable("Autos", (string)null);
                 });
@@ -592,13 +600,13 @@ namespace data_access.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DestinationLocationId")
+                    b.Property<int?>("DestinationLocationId")
                         .HasColumnType("int");
 
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StartLocationId")
+                    b.Property<int?>("StartLocationId")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
@@ -692,8 +700,7 @@ namespace data_access.Migrations
                     b.HasOne("business_logic.Entities.Location", "DestinationLocation")
                         .WithMany("DestinationRoutes")
                         .HasForeignKey("DestinationLocationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("business_logic.Entities.Driver", "Driver")
                         .WithMany("Routes")
@@ -704,8 +711,7 @@ namespace data_access.Migrations
                     b.HasOne("business_logic.Entities.Location", "StartLocation")
                         .WithMany("StartRoutes")
                         .HasForeignKey("StartLocationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Auto");
 

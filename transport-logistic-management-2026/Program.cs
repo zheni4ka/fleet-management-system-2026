@@ -46,7 +46,6 @@ namespace transport_logistic_management_2026
 
             app.UseHttpsRedirection();
 
-            // 2. ЗАСТОСУВАННЯ ПОЛІТИКИ (Передаємо назву)
             app.UseCors("AllowNextJS");
 
             app.UseAuthorization();

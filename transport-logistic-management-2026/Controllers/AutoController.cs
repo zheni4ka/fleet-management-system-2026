@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using business_logic.DTOs;
+using business_logic.Entities;
 using business_logic.Interfaces;
-using business_logic.DTOs;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 
 namespace transport_logistic_management_2026.Controllers
 {
@@ -76,5 +77,20 @@ namespace transport_logistic_management_2026.Controllers
         {
             return Ok(_autoService.Get(id));
         }
+
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] AutoStatus newStatus)
+        {
+            try
+            {
+                await _autoService.UpdateStatusAsync(id, newStatus);
+                return Ok(new { message = "Статус автомобіля успішно змінено." });
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+        }
+
     }
 }

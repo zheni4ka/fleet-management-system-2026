@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace data_access.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,11 +58,12 @@ namespace data_access.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Mark = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Capacity = table.Column<double>(type: "float", nullable: false)
+                    Number = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Capacity = table.Column<double>(type: "float", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,6 +84,20 @@ namespace data_access.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Drivers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Locations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    City = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -217,10 +234,11 @@ namespace data_access.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Start = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Destination = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartLocationId = table.Column<int>(type: "int", nullable: true),
+                    DestinationLocationId = table.Column<int>(type: "int", nullable: true),
                     DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     AutoId = table.Column<int>(type: "int", nullable: false),
                     DriverId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -239,6 +257,65 @@ namespace data_access.Migrations
                         principalTable: "Drivers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Routes_Locations_DestinationLocationId",
+                        column: x => x.DestinationLocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Routes_Locations_StartLocationId",
+                        column: x => x.StartLocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "Id", "City", "Country" },
+                values: new object[,]
+                {
+                    { 1, "Kyiv", "Ukraine" },
+                    { 2, "Lviv", "Ukraine" },
+                    { 3, "Odessa", "Ukraine" },
+                    { 4, "Kharkiv", "Ukraine" },
+                    { 5, "Dnipro", "Ukraine" },
+                    { 6, "Zaporizhzhia", "Ukraine" },
+                    { 7, "Ivano-Frankivsk", "Ukraine" },
+                    { 8, "Ternopil", "Ukraine" },
+                    { 9, "Chernivtsi", "Ukraine" },
+                    { 10, "Vinnytsia", "Ukraine" },
+                    { 11, "Rivne", "Ukraine" },
+                    { 12, "Lutsk", "Ukraine" },
+                    { 13, "Poltava", "Ukraine" },
+                    { 14, "Chernihiv", "Ukraine" },
+                    { 15, "Cherkasy", "Ukraine" },
+                    { 16, "Khmelnytskyi", "Ukraine" },
+                    { 17, "Zhytomyr", "Ukraine" },
+                    { 18, "Uzhhorod", "Ukraine" },
+                    { 19, "Mykolaiv", "Ukraine" },
+                    { 20, "Kherson", "Ukraine" },
+                    { 21, "Sumy", "Ukraine" },
+                    { 22, "Kropyvnytskyi", "Ukraine" },
+                    { 24, "Warsaw", "Poland" },
+                    { 25, "Krakow", "Poland" },
+                    { 26, "Wroclaw", "Poland" },
+                    { 27, "Gdansk", "Poland" },
+                    { 28, "Poznan", "Poland" },
+                    { 29, "Lodz", "Poland" },
+                    { 30, "Katowice", "Poland" },
+                    { 31, "Lublin", "Poland" },
+                    { 32, "Rzeszow", "Poland" },
+                    { 33, "Szczecin", "Poland" },
+                    { 34, "Bydgoszcz", "Poland" },
+                    { 35, "Gdynia", "Poland" },
+                    { 36, "Bialystok", "Poland" },
+                    { 37, "Czestochowa", "Poland" },
+                    { 38, "Radom", "Poland" },
+                    { 39, "Torun", "Poland" },
+                    { 40, "Kielce", "Poland" },
+                    { 41, "Gliwice", "Poland" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -286,14 +363,30 @@ namespace data_access.Migrations
                 column: "AutoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Autos_Number",
+                table: "Autos",
+                column: "Number",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Routes_AutoId",
                 table: "Routes",
                 column: "AutoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Routes_DestinationLocationId",
+                table: "Routes",
+                column: "DestinationLocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Routes_DriverId",
                 table: "Routes",
                 column: "DriverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Routes_StartLocationId",
+                table: "Routes",
+                column: "StartLocationId");
         }
 
         /// <inheritdoc />
@@ -331,6 +424,9 @@ namespace data_access.Migrations
 
             migrationBuilder.DropTable(
                 name: "Drivers");
+
+            migrationBuilder.DropTable(
+                name: "Locations");
         }
     }
 }

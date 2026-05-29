@@ -12,7 +12,8 @@ namespace business_logic
             CreateMap<Driver, CreateDriverModel>().ReverseMap();
             CreateMap<Driver, EditDriverModel>().ReverseMap();
 
-            CreateMap<Auto, AutoDTO>().ReverseMap();
+            CreateMap<Auto, AutoDTO>()
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
             CreateMap<Auto, CreateAutoModel>().ReverseMap();
             CreateMap<Auto, EditAutoModel>().ReverseMap();
 

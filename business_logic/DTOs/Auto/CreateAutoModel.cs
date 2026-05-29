@@ -1,5 +1,7 @@
 ﻿
 
+using business_logic.Entities;
+
 namespace business_logic.DTOs
 {
     public class CreateAutoModel

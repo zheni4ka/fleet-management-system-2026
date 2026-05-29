@@ -19,6 +19,15 @@ namespace business_logic.Validators.Auto
                .MaximumLength(16)
                .WithMessage("Model of this car must be less than 16");
 
+            RuleFor(x => x.Model)
+                .NotEmpty()
+                .WithMessage("Model of this car is required.");
+
+            RuleFor(x => x.Capacity)
+                .Must(capacity => capacity > 0)
+                .WithMessage("Capacity must be greater than 0.");
+
+
             RuleFor(x => x.Number)
                 .Matches((@"^[А-ЩЬЮЯҐЄІЇ][А-ЩЬЮЯҐЄІЇ][0-9]{0,4}[А-ЩЬЮЯҐЄІЇ][А-ЩЬЮЯҐЄІЇ]$"));
         }

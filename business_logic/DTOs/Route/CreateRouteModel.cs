@@ -1,4 +1,6 @@
-﻿namespace business_logic.DTOs
+﻿using business_logic.Entities;
+
+namespace business_logic.DTOs
 {
     public class CreateRouteModel
     {
@@ -8,6 +10,6 @@
         public DateTime ArrivalTime { get; set; }
         public int AutoId { get; set; }
         public int DriverId { get; set; }
-        public business_logic.Entities.RouteStatus Status { get; set; } = business_logic.Entities.RouteStatus.Planned;
+        public RouteStatus Status { get; set; } = RouteStatus.Planned;
     }
 }
