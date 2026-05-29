@@ -12,12 +12,14 @@ namespace business_logic.Validators
         public CreateRouteModelValidator() 
         {
             RuleFor(x => x.StartLocationId)
-                .GreaterThan(0)
-                .WithMessage("Start location is required.");
+                .Cascade(CascadeMode.Stop)
+                .Must(id => id == null || id > 0)
+                .WithMessage("Start location id must be greater than 0 when provided.");
 
             RuleFor(x => x.DestinationLocationId)
-                .GreaterThan(0)
-                .WithMessage("Destination location is required.");
+                .Cascade(CascadeMode.Stop)
+                .Must(id => id == null || id > 0)
+                .WithMessage("Destination location id must be greater than 0 when provided.");
 
              RuleFor(x => x.DriverId)
                 .GreaterThan(0)

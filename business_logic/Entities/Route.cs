@@ -14,10 +14,10 @@ namespace business_logic.Entities
     {
         public int Id { get; set; }
 
-        public int StartLocationId { get; set; }
+        public int? StartLocationId { get; set; }
         public Location StartLocation { get; set; }
 
-        public int DestinationLocationId { get; set; }
+        public int? DestinationLocationId { get; set; }
         public Location DestinationLocation { get; set; }
 
         public DateTime DepartureTime { get; set; }

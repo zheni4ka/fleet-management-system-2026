@@ -2,8 +2,8 @@
 {
     public class CreateRouteModel
     {
-        public int StartLocationId { get; set; }
-        public int DestinationLocationId { get; set; }
+        public int? StartLocationId { get; set; }
+        public int? DestinationLocationId { get; set; }
         public DateTime DepartureTime { get; set; }
         public DateTime ArrivalTime { get; set; }
         public int AutoId { get; set; }

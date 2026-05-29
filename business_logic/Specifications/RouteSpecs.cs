@@ -23,14 +23,14 @@ namespace business_logic.Specifications
         {
             public ByStart(string startPoint)
             {
-                Query.Where(r => r.StartLocation.City == startPoint || r.StartLocationId.ToString() == startPoint);
+                Query.Where(r => (r.StartLocation != null && r.StartLocation.City == startPoint) || (r.StartLocationId != null && r.StartLocationId.ToString() == startPoint));
             }
         }
         public class ByDestination : Specification<Route>
         {
             public ByDestination(string endPoint)
             {
-                Query.Where(r => r.DestinationLocation.City == endPoint || r.DestinationLocationId.ToString() == endPoint);
+                Query.Where(r => (r.DestinationLocation != null && r.DestinationLocation.City == endPoint) || (r.DestinationLocationId != null && r.DestinationLocationId.ToString() == endPoint));
             }
         }
 
