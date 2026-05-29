@@ -10,7 +10,7 @@ namespace transport_logistic_management_2026.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class RouteController : Controller
     {
         private readonly IRouteService _routeService;
@@ -25,7 +25,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin,Dispatcher")]
+        //[Authorize(Roles = "Dispatcher")]
         public IActionResult Create([FromBody] CreateRouteModel model)
         {
             var validationResult = _createValidator.Validate(model);
@@ -46,7 +46,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = "Admin,Dispatcher")]
+        //[Authorize(Roles = "Dispatcher")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _routeService.Delete(id);

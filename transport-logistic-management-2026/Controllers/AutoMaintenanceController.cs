@@ -18,7 +18,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromForm] CreateAutoMaintenanceModel model)
+        public IActionResult Create([FromBody] CreateAutoMaintenanceModel model)
         {
             var validationResult = _createValidator.Validate(model);
             if (!validationResult.IsValid)

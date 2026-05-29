@@ -1,7 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-using business_logic.Interfaces;
 using business_logic.DTOs;
+using business_logic.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace transport_logistic_management_2026.Controllers
 {
@@ -21,6 +22,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] CreateDriverModel model)
         {
             var validationResult = _createValidator.Validate(model);
@@ -39,15 +41,15 @@ namespace transport_logistic_management_2026.Controllers
             _driverService.Create(model);
             return Ok();
         }
-
         [HttpDelete("{id:int}")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _driverService.Delete(id);
             return Ok();
         }
-
         [HttpPut]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit([FromBody] EditDriverModel model)
         {
             var validationResult = _editValidator.Validate(model);

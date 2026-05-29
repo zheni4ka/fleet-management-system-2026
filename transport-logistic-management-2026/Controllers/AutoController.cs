@@ -21,7 +21,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromForm] CreateAutoModel auto)
+        public IActionResult Create([FromBody] CreateAutoModel auto)
         {
             var validationResult = _createValidator.Validate(auto);
             if (!validationResult.IsValid)
@@ -32,6 +32,7 @@ namespace transport_logistic_management_2026.Controllers
                     Title = "Validation Failed",
                     Detail = "One or more validation errors occurred."
                 };
+                return BadRequest(errors);
             }
 
             _autoService.Create(auto);
@@ -46,7 +47,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Edit([FromForm] EditAutoModel model)
+        public async Task<IActionResult> Edit([FromBody] EditAutoModel model)
         {
             var validationResult = _editValidator.Validate(model);
             if (!validationResult.IsValid)

@@ -17,7 +17,7 @@ namespace business_logic.Specifications
         {
             public ByName(string name)
             {
-                Query.Where(a => a.Name == name);
+                Query.Where(a => a.Mark == name);
             }
         }
 
@@ -25,7 +25,7 @@ namespace business_logic.Specifications
         {
             public All()
             {
-                Query.OrderBy(a => a.Name);
+                Query.OrderBy(a => a.Mark);
             }
         }
 

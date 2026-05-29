@@ -5,10 +5,10 @@ namespace business_logic.DTOs
     public class AutoDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string Mark { get; set; }
         public string Model { get; set; }
         public string Color { get; set; }
         public string Number { get; set; }
-        public double LoadCarryingCapacity { get; set; }
+        public double Capacity { get; set; }
     }
 }

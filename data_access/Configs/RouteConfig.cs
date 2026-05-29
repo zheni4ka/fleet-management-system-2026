@@ -20,6 +20,18 @@ namespace data_access.Configs
                 .WithMany(a => a.Routes)
                 .HasForeignKey(r => r.DriverId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(r => r.Status).HasDefaultValue(RouteStatus.Planned);
+
+            builder.HasOne(r => r.StartLocation)
+                .WithMany(l => l.StartRoutes)
+                .HasForeignKey(r => r.StartLocationId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(r => r.DestinationLocation)
+                .WithMany(l => l.DestinationRoutes)
+                .HasForeignKey(r => r.DestinationLocationId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

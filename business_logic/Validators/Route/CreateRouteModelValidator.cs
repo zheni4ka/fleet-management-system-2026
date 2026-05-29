@@ -1,4 +1,5 @@
-﻿using business_logic.Entities;
+﻿using business_logic.DTOs;
+using business_logic.Entities;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,17 @@ using System.Text;
 
 namespace business_logic.Validators
 {
-    public class CreateRouteValidator : AbstractValidator<Route>
+    public class CreateRouteModelValidator : AbstractValidator<CreateRouteModel>
     {
-        public CreateRouteValidator() 
+        public CreateRouteModelValidator() 
         {
-            RuleFor(x => x.Start)
-                .NotEmpty()
-                .WithMessage("Start point is required.")
-                .MaximumLength(100)
-                .WithMessage("Start point cannot exceed 100 characters.");
+            RuleFor(x => x.StartLocationId)
+                .GreaterThan(0)
+                .WithMessage("Start location is required.");
 
-            RuleFor(x => x.Destination)
-                .NotEmpty()
-                .WithMessage("Destination is required.")
-                .MaximumLength(100)
-                .WithMessage("Destination cannot exceed 100 characters.");
+            RuleFor(x => x.DestinationLocationId)
+                .GreaterThan(0)
+                .WithMessage("Destination location is required.");
 
              RuleFor(x => x.DriverId)
                 .GreaterThan(0)

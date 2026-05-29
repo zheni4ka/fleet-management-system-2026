@@ -12,8 +12,8 @@ using data_access.data;
 namespace data_access.Migrations
 {
     [DbContext(typeof(FMS_DbContext))]
-    [Migration("20260321140845_AutoTable")]
-    partial class AutoTable
+    [Migration("20260522194552_name_table_changed")]
+    partial class name_table_changed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,18 +231,18 @@ namespace data_access.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("Capacity")
+                        .HasColumnType("float");
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("LoadCarryingCapacity")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Model")
+                    b.Property<string>("Mark")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -253,6 +253,35 @@ namespace data_access.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Autos", (string)null);
+                });
+
+            modelBuilder.Entity("business_logic.Entities.AutoMaintenance", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AutoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ServiceDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutoId");
+
+                    b.ToTable("AutoMaintenance", (string)null);
                 });
 
             modelBuilder.Entity("business_logic.Entities.Driver", b =>
@@ -282,6 +311,43 @@ namespace data_access.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Drivers", (string)null);
+                });
+
+            modelBuilder.Entity("business_logic.Entities.Route", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("AutoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DriverId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Start")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AutoId");
+
+                    b.HasIndex("DriverId");
+
+                    b.ToTable("Routes", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -333,6 +399,48 @@ namespace data_access.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("business_logic.Entities.AutoMaintenance", b =>
+                {
+                    b.HasOne("business_logic.Entities.Auto", "Auto")
+                        .WithMany("Services")
+                        .HasForeignKey("AutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auto");
+                });
+
+            modelBuilder.Entity("business_logic.Entities.Route", b =>
+                {
+                    b.HasOne("business_logic.Entities.Auto", "Auto")
+                        .WithMany("Routes")
+                        .HasForeignKey("AutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("business_logic.Entities.Driver", "Driver")
+                        .WithMany("Routes")
+                        .HasForeignKey("DriverId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auto");
+
+                    b.Navigation("Driver");
+                });
+
+            modelBuilder.Entity("business_logic.Entities.Auto", b =>
+                {
+                    b.Navigation("Routes");
+
+                    b.Navigation("Services");
+                });
+
+            modelBuilder.Entity("business_logic.Entities.Driver", b =>
+                {
+                    b.Navigation("Routes");
                 });
 #pragma warning restore 612, 618
         }

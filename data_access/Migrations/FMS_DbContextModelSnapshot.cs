@@ -11,7 +11,7 @@ using data_access.data;
 namespace data_access.Migrations
 {
     [DbContext(typeof(FMS_DbContext))]
-    partial class TLMDbContextModelSnapshot : ModelSnapshot
+    partial class FMS_DbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -235,11 +235,11 @@ namespace data_access.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Model")
+                    b.Property<string>("Mark")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Model")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -310,6 +310,271 @@ namespace data_access.Migrations
                     b.ToTable("Drivers", (string)null);
                 });
 
+            modelBuilder.Entity("business_logic.Entities.Location", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Locations", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            City = "Kyiv",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Lviv",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Odessa",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            City = "Kharkiv",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            City = "Dnipro",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            City = "Zaporizhzhia",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            City = "Ivano-Frankivsk",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            City = "Ternopil",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            City = "Chernivtsi",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            City = "Vinnytsia",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            City = "Rivne",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            City = "Lutsk",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            City = "Poltava",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            City = "Chernihiv",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            City = "Cherkasy",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 16,
+                            City = "Khmelnytskyi",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 17,
+                            City = "Zhytomyr",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 18,
+                            City = "Uzhhorod",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 19,
+                            City = "Mykolaiv",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 20,
+                            City = "Kherson",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            City = "Sumy",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            City = "Kropyvnytskyi",
+                            Country = "Ukraine"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            City = "Warsaw",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            City = "Krakow",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 26,
+                            City = "Wroclaw",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 27,
+                            City = "Gdansk",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 28,
+                            City = "Poznan",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 29,
+                            City = "Lodz",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 30,
+                            City = "Katowice",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            City = "Lublin",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            City = "Rzeszow",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            City = "Szczecin",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            City = "Bydgoszcz",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            City = "Gdynia",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 36,
+                            City = "Bialystok",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 37,
+                            City = "Czestochowa",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 38,
+                            City = "Radom",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 39,
+                            City = "Torun",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 40,
+                            City = "Kielce",
+                            Country = "Poland"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            City = "Gliwice",
+                            Country = "Poland"
+                        });
+                });
+
             modelBuilder.Entity("business_logic.Entities.Route", b =>
                 {
                     b.Property<int>("Id")
@@ -327,22 +592,29 @@ namespace data_access.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Destination")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("DestinationLocationId")
+                        .HasColumnType("int");
 
                     b.Property<int>("DriverId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Start")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StartLocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 
                     b.HasIndex("AutoId");
 
+                    b.HasIndex("DestinationLocationId");
+
                     b.HasIndex("DriverId");
+
+                    b.HasIndex("StartLocationId");
 
                     b.ToTable("Routes", (string)null);
                 });
@@ -417,15 +689,31 @@ namespace data_access.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("business_logic.Entities.Location", "DestinationLocation")
+                        .WithMany("DestinationRoutes")
+                        .HasForeignKey("DestinationLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("business_logic.Entities.Driver", "Driver")
                         .WithMany("Routes")
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("business_logic.Entities.Location", "StartLocation")
+                        .WithMany("StartRoutes")
+                        .HasForeignKey("StartLocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Auto");
 
+                    b.Navigation("DestinationLocation");
+
                     b.Navigation("Driver");
+
+                    b.Navigation("StartLocation");
                 });
 
             modelBuilder.Entity("business_logic.Entities.Auto", b =>
@@ -438,6 +726,13 @@ namespace data_access.Migrations
             modelBuilder.Entity("business_logic.Entities.Driver", b =>
                 {
                     b.Navigation("Routes");
+                });
+
+            modelBuilder.Entity("business_logic.Entities.Location", b =>
+                {
+                    b.Navigation("DestinationRoutes");
+
+                    b.Navigation("StartRoutes");
                 });
 #pragma warning restore 612, 618
         }

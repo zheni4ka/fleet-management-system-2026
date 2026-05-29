@@ -18,7 +18,7 @@ namespace transport_logistic_management_2026
             builder.Services.AddControllers().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-            }); 
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddBusinessLogicServices();
@@ -26,10 +26,17 @@ namespace transport_logistic_management_2026
             builder.Services.AddIdentity();
             builder.Services.AddOpenApi();
 
-            var app = builder.Build();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowNextJS", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000") 
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
 
-            // seed identity roles and admin
-            IdentitySeeder.SeedAsync(app.Services).GetAwaiter().GetResult();
+            var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
             {
@@ -38,6 +45,9 @@ namespace transport_logistic_management_2026
             }
 
             app.UseHttpsRedirection();
+
+            // 2. «¿—“Œ—”¬¿ÕÕﬂ œŒÀ≤“» » (œÂÂ‰‡∫ÏÓ Ì‡Á‚Û)
+            app.UseCors("AllowNextJS");
 
             app.UseAuthorization();
 

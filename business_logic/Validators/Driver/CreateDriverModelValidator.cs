@@ -17,7 +17,6 @@ namespace business_logic.Validators
                 .Matches(@"^[А-ЩЬЮЯҐЄІЇ][а-щьюяґєії]{0,16}$")
                 .MaximumLength(100).WithMessage("Surname cannot exceed 100 characters.");
 
-
             RuleFor(x => x.Surname)
                 .NotEmpty().WithMessage("Surname is required.");
 
