@@ -9,6 +9,7 @@ namespace business_logic.Interfaces
     {
         public void Create(CreateAutoMaintenanceModel driverModel);
         public Task Update(EditAutoMaintenanceModel model);
+        public Task Delete(int id);
         public Task<AutoMaintenanceDTO> Get(int id);
         public IEnumerable<AutoMaintenanceDTO> GetAll();
         public Task<IEnumerable<AutoMaintenanceDTO>> GetByAutoId(int id);

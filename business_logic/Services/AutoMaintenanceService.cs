@@ -27,21 +27,21 @@ namespace business_logic.Services
                 throw new KeyNotFoundException("Запис про технічне обслуговування не знайдено");
             }
             _mapper.Map(model, service);
-             _amR.Update(service);
-             _amR.Save();
+            _amR.Update(service);
+            _amR.Save();
         }
 
         public void Create(CreateAutoMaintenanceModel driverModel)
         {
-            var auto =  _autoR.GetById(driverModel.AutoId);
+            var auto = _autoR.GetById(driverModel.AutoId);
             if (auto != null && auto.Status == AutoStatus.InService)
             {
                 throw new InvalidOperationException("Автомобіль зараз у рейсі й не може бути відправлений на ремонт!");
             }
 
             var service = _mapper.Map<AutoMaintenance>(driverModel);
-             _amR.Insert(service);
-             _amR.Save();
+            _amR.Insert(service);
+            _amR.Save();
 
             if (auto != null)
             {
@@ -50,27 +50,27 @@ namespace business_logic.Services
                 _autoR.Save();
             }
 
-             _mapper.Map<AutoMaintenanceDTO>(service);
+            _mapper.Map<AutoMaintenanceDTO>(service);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task Delete(int id)
         {
-            var service =  _amR.GetById(id);
+            var service = _amR.GetById(id);
             if (service == null)
             {
-                throw new KeyNotFoundException("Запис про технічне обслуговування не знайдено");
+                throw new KeyNotFoundException("Record not found");
             }
 
-            var auto =  _autoR.GetById(service.AutoId);
+            var auto = _autoR.GetById(service.AutoId);
             if (auto != null)
             {
                 auto.Status = AutoStatus.Available;
-                 _autoR.Update(auto);
-                 _autoR.Save();
+                _autoR.Update(auto);
+                _autoR.Save();
             }
 
-             _amR.Delete(id);
-             _amR.Save();
+            _amR.Delete(id);
+            _amR.Save();
         }
 
         public async Task<IEnumerable<AutoMaintenanceDTO>> GetByAutoId(int id)
@@ -93,9 +93,18 @@ namespace business_logic.Services
 
         public IEnumerable<AutoMaintenanceDTO> GetAll() { return _mapper.Map<IEnumerable<AutoMaintenanceDTO>>(_amR.GetAll()); }
 
-        public Task Update(EditAutoMaintenanceModel model)
+        public async Task Update(EditAutoMaintenanceModel model)
         {
-            throw new NotImplementedException();
+            var service = _amR.GetById(model.Id);
+            if (service == null)
+            {
+                throw new KeyNotFoundException("Record not found");
+            }
+            _mapper.Map(model, service);
+            _amR.Update(service);
+            _amR.Save();
         }
+
+
     }
 }

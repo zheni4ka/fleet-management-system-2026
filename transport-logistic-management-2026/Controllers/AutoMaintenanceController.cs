@@ -11,10 +11,12 @@ namespace transport_logistic_management_2026.Controllers
     {
         private readonly IAutoMaintenanceService _amservice;
         private readonly IValidator<CreateAutoMaintenanceModel> _createValidator;
-        public AutoMaintenanceController(IAutoMaintenanceService amservice, IValidator<CreateAutoMaintenanceModel> createValidator)
+        private readonly IValidator<EditAutoMaintenanceModel> _editValidator;
+        public AutoMaintenanceController(IAutoMaintenanceService amservice, IValidator<CreateAutoMaintenanceModel> createValidator, IValidator<EditAutoMaintenanceModel> editValidator)
         {
             _amservice = amservice;
             _createValidator = createValidator;
+            _editValidator = editValidator;
         }
 
         [HttpPost]
@@ -34,6 +36,33 @@ namespace transport_logistic_management_2026.Controllers
             }
 
             _amservice.Create(model);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromBody] EditAutoMaintenanceModel model)
+        {
+            var validationResult = _editValidator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                var errors = new ValidationProblemDetails(validationResult.ToDictionary())
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Validation Failed",
+                    Detail = "One or more validation errors occurred."
+                };
+
+                return BadRequest(errors);
+            }
+
+            await _amservice.Update(model);
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            await _amservice.Delete(id);
             return Ok();
         }
 
