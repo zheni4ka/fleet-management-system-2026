@@ -31,9 +31,6 @@ namespace data_access.Identity
                 await userManager.CreateAsync(admin, "Admin123!");
                 await userManager.AddToRoleAsync(admin, "Admin");
             }
-
-            
-            IdentitySeeder.SeedAsync(services).GetAwaiter().GetResult();
         }
     }
 }

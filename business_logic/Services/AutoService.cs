@@ -54,7 +54,7 @@ namespace business_logic.Services
             return _mapper.Map<IEnumerable<AutoDTO>>(autos);
         }
 
-        public async Task UpdateStatusAsync(int autoId, AutoStatus newStatus)
+        public async Task UpdateStatus(int autoId, AutoStatus newStatus)
         {
             var auto = autoR.GetById(autoId);
             if(auto == null)

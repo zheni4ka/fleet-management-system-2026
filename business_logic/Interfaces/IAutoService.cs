@@ -11,6 +11,6 @@ namespace business_logic.Interfaces
         public Task Delete(int id);
         public Task Edit(EditAutoModel model);
 
-        public Task UpdateStatusAsync(int autoId, AutoStatus newStatus);
+        public Task UpdateStatus(int autoId, AutoStatus newStatus);
     }
 }

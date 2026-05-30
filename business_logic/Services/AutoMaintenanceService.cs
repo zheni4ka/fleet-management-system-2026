@@ -9,18 +9,68 @@ namespace business_logic.Services
     public class AutoMaintenanceService : IAutoMaintenanceService
     {
         private readonly IRepository<AutoMaintenance> _amR;
+        private readonly IRepository<Auto> _autoR;
         private readonly IMapper _mapper;
 
-        public AutoMaintenanceService(IRepository<AutoMaintenance> amR, IMapper mapper)
+        public AutoMaintenanceService(IRepository<AutoMaintenance> amR, IRepository<Auto> autoR, IMapper mapper)
         {
             _amR = amR;
+            _autoR = autoR;
             _mapper = mapper;
+        }
+
+        public async Task Update(AutoMaintenanceDTO model)
+        {
+            var service = _amR.GetById(model.Id);
+            if (service == null)
+            {
+                throw new KeyNotFoundException("Запис про технічне обслуговування не знайдено");
+            }
+            _mapper.Map(model, service);
+             _amR.Update(service);
+             _amR.Save();
         }
 
         public void Create(CreateAutoMaintenanceModel driverModel)
         {
-            _amR.Insert(_mapper.Map<AutoMaintenance>(driverModel));
-            _amR.Save();
+            var auto =  _autoR.GetById(driverModel.AutoId);
+            if (auto != null && auto.Status == AutoStatus.InService)
+            {
+                throw new InvalidOperationException("Автомобіль зараз у рейсі й не може бути відправлений на ремонт!");
+            }
+
+            var service = _mapper.Map<AutoMaintenance>(driverModel);
+             _amR.Insert(service);
+             _amR.Save();
+
+            if (auto != null)
+            {
+                auto.Status = AutoStatus.UnderMaintenance;
+                _autoR.Update(auto);
+                _autoR.Save();
+            }
+
+             _mapper.Map<AutoMaintenanceDTO>(service);
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var service =  _amR.GetById(id);
+            if (service == null)
+            {
+                throw new KeyNotFoundException("Запис про технічне обслуговування не знайдено");
+            }
+
+            var auto =  _autoR.GetById(service.AutoId);
+            if (auto != null)
+            {
+                auto.Status = AutoStatus.Available;
+                 _autoR.Update(auto);
+                 _autoR.Save();
+            }
+
+             _amR.Delete(id);
+             _amR.Save();
         }
 
         public async Task<IEnumerable<AutoMaintenanceDTO>> GetByAutoId(int id)
@@ -43,5 +93,9 @@ namespace business_logic.Services
 
         public IEnumerable<AutoMaintenanceDTO> GetAll() { return _mapper.Map<IEnumerable<AutoMaintenanceDTO>>(_amR.GetAll()); }
 
+        public Task Update(EditAutoMaintenanceModel model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

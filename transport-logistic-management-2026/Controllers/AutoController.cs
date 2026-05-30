@@ -83,7 +83,7 @@ namespace transport_logistic_management_2026.Controllers
         {
             try
             {
-                await _autoService.UpdateStatusAsync(id, newStatus);
+                await _autoService.UpdateStatus(id, newStatus);
                 return Ok(new { message = "Статус автомобіля успішно змінено." });
             }
             catch (KeyNotFoundException ex)

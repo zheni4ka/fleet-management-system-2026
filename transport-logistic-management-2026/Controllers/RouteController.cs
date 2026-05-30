@@ -25,7 +25,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Dispatcher")]
+        //[Authorize(Roles = "Admin,Dispatcher")]
         public IActionResult Create([FromBody] CreateRouteModel model)
         {
             var validationResult = _createValidator.Validate(model);
@@ -46,7 +46,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        //[Authorize(Roles = "Dispatcher")]
+        //[Authorize(Roles = "Admin,Dispatcher")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _routeService.Delete(id);

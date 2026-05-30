@@ -8,5 +8,6 @@ namespace business_logic.Interfaces
         public Task<RouteDTO> Get(int id);
         public IEnumerable<RouteDTO> GetAll();
         public Task Delete(int id);
+        public Task Update(EditRouteModel model);
     }
 }
