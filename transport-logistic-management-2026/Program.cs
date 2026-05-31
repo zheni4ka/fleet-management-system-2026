@@ -4,6 +4,8 @@ using data_access.Identity;
 using Microsoft.AspNetCore.Identity;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
+using transport_logistic_management_2026.Helpers;
+using data_access.Identity;
 
 namespace transport_logistic_management_2026
 {
@@ -25,6 +27,8 @@ namespace transport_logistic_management_2026
             builder.Services.AddDataAccessServices(connectionString);
             builder.Services.AddIdentity();
             builder.Services.AddOpenApi();
+            builder.Services.AddJwtAuthentication(builder.Configuration);
+            
 
             builder.Services.AddCors(options =>
             {
@@ -51,6 +55,20 @@ namespace transport_logistic_management_2026
             app.UseAuthorization();
 
             app.MapControllers();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    IdentitySeeder.SeedAsync(services);
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "Помилка під час автоматичного створення ролей та адміністратора (Seeding).");
+                }
+            }
 
             app.Run();
         }

@@ -49,15 +49,14 @@ namespace business_logic.Services
                 throw new KeyNotFoundException("Route not found");
             }
 
-            // Якщо видаляємо активний рейс, звільняємо машину
             if (route.Status == RouteStatus.InProgress)
             {
                 var auto =  AutoR.GetById(route.AutoId);
                 if (auto != null)
                 {
                     auto.Status = AutoStatus.Available;
-                     AutoR.Update(auto);
-                     AutoR.Save();
+                    AutoR.Update(auto);
+                    AutoR.Save();
                 }
             }
 
