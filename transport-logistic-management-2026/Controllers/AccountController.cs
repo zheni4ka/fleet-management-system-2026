@@ -36,7 +36,7 @@ namespace transport_logistic_management_2026.Controllers
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                return Unauthorized(new { message = "Невірне ім'я користувача або пароль." });
+                return Unauthorized(new { message = "Wrong username or password." });
             }
 
             var userRoles = await _userManager.GetRolesAsync(user);

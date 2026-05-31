@@ -36,7 +36,6 @@ namespace data_access
             .AddEntityFrameworkStores<FMS_DbContext>()
             .AddDefaultTokenProviders();
 
-            Identity.IdentitySeeder.SeedAsync(services.BuildServiceProvider()).Wait();
         }
     }
 }

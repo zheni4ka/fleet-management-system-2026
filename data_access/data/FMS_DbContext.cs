@@ -6,7 +6,9 @@ namespace data_access.data
 {
     public class FMS_DbContext : IdentityDbContext
     {
-        public FMS_DbContext(DbContextOptions opt) : base(opt) { }
+        public FMS_DbContext(DbContextOptions<FMS_DbContext> opt) : base(opt)
+        {
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

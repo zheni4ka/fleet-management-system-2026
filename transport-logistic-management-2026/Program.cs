@@ -1,11 +1,9 @@
 using business_logic;
 using data_access;
 using data_access.Identity;
-using Microsoft.AspNetCore.Identity;
 using Scalar.AspNetCore;
 using System.Text.Json.Serialization;
 using transport_logistic_management_2026.Helpers;
-using data_access.Identity;
 
 namespace transport_logistic_management_2026
 {
@@ -56,19 +54,7 @@ namespace transport_logistic_management_2026
 
             app.MapControllers();
 
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    IdentitySeeder.SeedAsync(services);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Помилка під час автоматичного створення ролей та адміністратора (Seeding).");
-                }
-            }
+            IdentitySeeder.SeedAsync(app.Services);
 
             app.Run();
         }
