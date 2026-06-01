@@ -11,6 +11,7 @@ namespace business_logic.Services
         private readonly IRepository<Route> routeR;
         private readonly IRepository<Auto> AutoR;
         private readonly IMapper _mapper;
+
         public RouteService(IRepository<Route> routeR, IRepository<Auto> autoR, IMapper mapper)
         {
             this.routeR = routeR;
@@ -39,22 +40,31 @@ namespace business_logic.Services
             var route = _mapper.Map<Route>(routeModel);
             routeR.Insert(route);
             routeR.Save();
+
+            if (route.Status == RouteStatus.Planned || route.Status == RouteStatus.InProgress)
+            {
+                auto.Status = AutoStatus.InService;
+                AutoR.Update(auto);
+                AutoR.Save();
+            }
         }
 
         public async Task Delete(int id)
         {
-            var route =  routeR.GetById(id);
+            var route = routeR.GetById(id);
             if (route == null)
             {
                 throw new KeyNotFoundException("Route not found");
             }
 
-            if (route.Status == RouteStatus.InProgress)
+            if (route.Status == RouteStatus.InProgress || route.Status == RouteStatus.Planned)
             {
-                var auto =  AutoR.GetById(route.AutoId);
+                var auto = AutoR.GetById(route.AutoId);
                 if (auto != null)
                 {
                     auto.Status = AutoStatus.Available;
+                    AutoR.Update(auto);
+                    AutoR.Save();
                 }
             }
 
@@ -93,7 +103,7 @@ namespace business_logic.Services
                 var auto = AutoR.GetById(route.AutoId);
                 if (auto != null)
                 {
-                    if (route.Status == RouteStatus.InProgress)
+                    if (route.Status == RouteStatus.InProgress || route.Status == RouteStatus.Planned)
                     {
                         auto.Status = AutoStatus.InService;
                         AutoR.Update(auto);
@@ -107,7 +117,6 @@ namespace business_logic.Services
                     }
                 }
             }
-
             routeR.Update(route);
             routeR.Save();
         }
