@@ -55,12 +55,11 @@ namespace business_logic.Services
                 if (auto != null)
                 {
                     auto.Status = AutoStatus.Available;
-                    AutoR.Update(auto);
-                    AutoR.Save();
                 }
             }
 
             routeR.Delete(id);
+            routeR.Save();
         }
 
         public async Task<RouteDTO> Get(int id)
