@@ -41,7 +41,6 @@ namespace transport_logistic_management_2026.Controllers
 
             var userRoles = await _userManager.GetRolesAsync(user);
 
-            // Формування Claims (даних токена)
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
@@ -55,7 +54,6 @@ namespace transport_logistic_management_2026.Controllers
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
             }
 
-            // Генерація токена
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"]));
 
             var token = new SecurityTokenDescriptor

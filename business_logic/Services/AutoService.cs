@@ -35,7 +35,10 @@ namespace business_logic.Services
 
         public async Task Edit(EditAutoModel model)
         {
-            autoR.Update(_mapper.Map<Auto>(model));
+            var auto = autoR.GetById(model.Id);
+            if (auto == null) throw new KeyNotFoundException("Auto not found");
+            _mapper.Map(model, auto);
+            autoR.Update(auto);
             autoR.Save();
         }
 

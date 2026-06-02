@@ -23,7 +23,7 @@ namespace data_access.Identity
             }
 
             // create default admin user
-            var adminEmail = "admin@tlm.local";
+            var adminEmail = "admin@gmail.com";
             var admin = await userManager.FindByEmailAsync(adminEmail);
             if (admin == null)
             {

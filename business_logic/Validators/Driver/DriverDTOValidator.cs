@@ -20,7 +20,7 @@ namespace business_logic.Validators
                 .MaximumLength(100).WithMessage("Patronymic cannot exceed 100 characters.");
 
             RuleFor(x => x.LicenseNumber)
-                .NotEmpty().WithMessage("Номер посвідчення водія є обов'язковим.")
+                .NotEmpty().WithMessage("License number is required.")
                 .Matches(@"^[A-Z]{3}\s\d{6}$")
                 .WithMessage("Format must be correct (ABC 123456)");
         }

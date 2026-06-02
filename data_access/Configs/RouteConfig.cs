@@ -14,12 +14,12 @@ namespace data_access.Configs
 
             builder.HasOne(r => r.Auto)
                    .WithMany(a => a.Routes)
-                   .HasForeignKey(r => r.AutoId).OnDelete(DeleteBehavior.Cascade);
+                   .HasForeignKey(r => r.AutoId).OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(r => r.Driver)
                 .WithMany(a => a.Routes)
                 .HasForeignKey(r => r.DriverId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property(r => r.Status).HasDefaultValue(RouteStatus.Planned);
 

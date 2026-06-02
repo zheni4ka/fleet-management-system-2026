@@ -10,6 +10,9 @@ namespace data_access.Configs
         {
             builder.HasKey(x => x.Id);
             builder.ToTable("Drivers");
+
+            builder.HasIndex(d => d.LicenseNumber)
+                .IsUnique();
         }
     }
 }
