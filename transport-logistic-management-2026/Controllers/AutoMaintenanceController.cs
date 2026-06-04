@@ -1,6 +1,7 @@
 ﻿using business_logic.DTOs;
 using business_logic.Interfaces;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace transport_logistic_management_2026.Controllers
@@ -20,6 +21,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] CreateAutoMaintenanceModel model)
         {
             var validationResult = _createValidator.Validate(model);
@@ -40,6 +42,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit([FromBody] EditAutoMaintenanceModel model)
         {
             var validationResult = _editValidator.Validate(model);
@@ -60,6 +63,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             await _amservice.Delete(id);

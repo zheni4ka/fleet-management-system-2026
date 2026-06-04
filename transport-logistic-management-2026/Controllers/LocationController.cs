@@ -34,6 +34,7 @@ namespace transport_logistic_management_2026.Controllers
         public IActionResult Get(int id) => Ok(_service.Get(id));
 
         [HttpDelete("{id:int}")]
+        
         public async Task<IActionResult> Delete(int id)
         {
             await _service.Delete(id);
