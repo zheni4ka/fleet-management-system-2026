@@ -15,12 +15,14 @@ namespace transport_logistic_management_2026.Controllers
     {
         private readonly IRouteService _routeService;
         private readonly IValidator<CreateRouteModel> _createValidator;
+        private readonly IValidator<EditRouteModel> _editValidator;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public RouteController(IRouteService routeService, IValidator<CreateRouteModel> createValidator, UserManager<IdentityUser> userManager)
+        public RouteController(IRouteService routeService, IValidator<CreateRouteModel> createValidator, IValidator<EditRouteModel> editValidator, UserManager<IdentityUser> userManager)
         {
             this._routeService = routeService;
             this._createValidator = createValidator;
+            this._editValidator = editValidator;
             this._userManager = userManager;
         }
 
@@ -52,6 +54,28 @@ namespace transport_logistic_management_2026.Controllers
             await _routeService.Delete(id);
             return Ok();
         }
+
+        [HttpPut("{id:int}")]
+        [Authorize(Roles = "Admin,Dispatcher")]
+        public async Task<IActionResult> Update([FromRoute] int id, [FromBody] EditRouteModel model)
+        {
+            var validationResult = _editValidator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                var errors = new ValidationProblemDetails(validationResult.ToDictionary())
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Validation Failed",
+                    Detail = "One or more validation errors occurred."
+                };
+
+                return BadRequest(errors);
+            }
+
+            await _routeService.Update(model);
+            return Ok();
+        }
+
 
         [HttpGet("all")]
         [AllowAnonymous]
