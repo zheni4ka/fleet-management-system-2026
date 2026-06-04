@@ -50,6 +50,7 @@ namespace transport_logistic_management_2026
 
             app.UseCors("AllowNextJS");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
