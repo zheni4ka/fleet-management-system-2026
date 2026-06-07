@@ -10,25 +10,39 @@ namespace business_logic.Services
     {
         private readonly IRepository<AutoMaintenance> _amR;
         private readonly IRepository<Auto> _autoR;
+        private readonly IRepository<Route> _routeR;
         private readonly IMapper _mapper;
 
-        public AutoMaintenanceService(IRepository<AutoMaintenance> amR, IRepository<Auto> autoR, IMapper mapper)
+        public AutoMaintenanceService(IRepository<AutoMaintenance> amR, IRepository<Auto> autoR, IMapper mapper, IRepository<Route> rs)
         {
             _amR = amR;
             _autoR = autoR;
             _mapper = mapper;
+            _routeR = rs;
         }
 
-        public async Task Update(AutoMaintenanceDTO model)
+        public async Task Update(EditAutoMaintenanceModel model)
         {
             var service = _amR.GetById(model.Id);
             if (service == null)
             {
-                throw new KeyNotFoundException("Запис про технічне обслуговування не знайдено");
+                throw new KeyNotFoundException("Record not found");
             }
+
             _mapper.Map(model, service);
             _amR.Update(service);
             _amR.Save();
+
+            if (model.IsCompleted)
+            {
+                var auto = _autoR.GetById(service.AutoId);
+                if (auto != null && auto.Status == AutoStatus.UnderMaintenance)
+                {
+                    auto.Status = AutoStatus.Available;
+                    _autoR.Update(auto);
+                    _autoR.Save();
+                }
+            }
         }
 
         public void Create(CreateAutoMaintenanceModel driverModel)
@@ -36,8 +50,10 @@ namespace business_logic.Services
             var auto = _autoR.GetById(driverModel.AutoId);
             if (auto != null && auto.Status == AutoStatus.InService)
             {
-                throw new InvalidOperationException("Автомобіль зараз у рейсі й не може бути відправлений на ремонт!");
+                auto.Status = AutoStatus.InService;
             }
+
+
 
             var service = _mapper.Map<AutoMaintenance>(driverModel);
             _amR.Insert(service);

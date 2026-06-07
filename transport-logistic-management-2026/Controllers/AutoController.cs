@@ -23,7 +23,7 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] CreateAutoModel auto)
         {
             var validationResult = _createValidator.Validate(auto);

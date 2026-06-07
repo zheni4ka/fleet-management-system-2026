@@ -34,6 +34,23 @@ namespace business_logic.Specifications
             }
         }
 
+        public class ByStartDate : Specification<Route>
+        {
+            public ByStartDate(DateTime dateTime)
+            {
+                Query.Where(r => r.DepartureTime.Equals(dateTime));
+            }
+        }
+
+        public class ByEndDate : Specification<Route>
+        {
+            public ByEndDate(DateTime dateTime)
+            {
+                Query.Where(r => r.ArrivalTime.Equals(dateTime));
+            }
+        }
+
+
         public class ByDriverId : Specification<Route>
         {
             public ByDriverId(int driverId)

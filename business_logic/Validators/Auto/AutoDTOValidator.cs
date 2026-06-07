@@ -7,7 +7,7 @@ namespace business_logic.Validators
     {
         public AutoDTOValidator() {
             RuleFor(x => x.Mark)
-                .MinimumLength(16)
+                .MaximumLength(16)
                 .WithMessage("Name of this car must be less than 16");
 
             RuleFor(x => x.Mark)

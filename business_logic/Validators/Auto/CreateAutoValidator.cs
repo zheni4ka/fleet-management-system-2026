@@ -16,7 +16,7 @@ namespace business_logic.Validators.Auto
                 .WithMessage("Name of this car is required.");
 
             RuleFor(x => x.Model)
-               .MaximumLength(16)
+               .MaximumLength(24)
                .WithMessage("Model of this car must be less than 16");
 
             RuleFor(x => x.Model)

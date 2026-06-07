@@ -19,29 +19,37 @@ namespace business_logic.Services
             this._mapper = mapper;
         }
 
+        private bool IsAutoAvailable(int autoId, DateTime departure, DateTime arrival, int? excludeRouteId = null)
+        {
+            var routes = routeR.GetAll().Where(r => r.AutoId == autoId && r.Status != RouteStatus.Cancelled && r.Status != RouteStatus.Completed);
+            if (excludeRouteId.HasValue) routes = routes.Where(r => r.Id != excludeRouteId.Value);
+            return !routes.Any(r => r.DepartureTime < arrival && r.ArrivalTime > departure);
+        }
+
+        private bool IsDriverAvailable(int driverId, DateTime departure, DateTime arrival, int? excludeRouteId = null)
+        {
+            var routes = routeR.GetAll().Where(r => r.DriverId == driverId && r.Status != RouteStatus.Cancelled && r.Status != RouteStatus.Completed);
+            if (excludeRouteId.HasValue) routes = routes.Where(r => r.Id != excludeRouteId.Value);
+            return !routes.Any(r => r.DepartureTime < arrival && r.ArrivalTime > departure);
+        }
+
         public void Create(CreateRouteModel routeModel)
         {
             var auto = AutoR.GetById(routeModel.AutoId);
-            if (auto == null)
-            {
-                throw new KeyNotFoundException("Auto not found");
-            }
+            if (auto == null) throw new KeyNotFoundException("Auto not found");
+            if (auto.Status == AutoStatus.UnderMaintenance) throw new InvalidOperationException("Автомобіль на ремонті.");
 
-            if (auto.Status == AutoStatus.UnderMaintenance)
-            {
-                throw new InvalidOperationException("Unable to create route: vehicle is currently under maintenance.");
-            }
+            if (!IsAutoAvailable(routeModel.AutoId, routeModel.DepartureTime, routeModel.ArrivalTime))
+                throw new InvalidOperationException("Автомобіль вже зайнятий на іншому рейсі у цей час.");
 
-            if (auto.Status == AutoStatus.InService)
-            {
-                throw new InvalidOperationException("Unable to create route: vehicle is already in a route.");
-            }
+            if (!IsDriverAvailable(routeModel.DriverId, routeModel.DepartureTime, routeModel.ArrivalTime))
+                throw new InvalidOperationException("Водій вже зайнятий на іншому рейсі у цей час.");
 
             var route = _mapper.Map<Route>(routeModel);
             routeR.Insert(route);
             routeR.Save();
 
-            if (route.Status == RouteStatus.Planned || route.Status == RouteStatus.InProgress)
+            if (route.Status == RouteStatus.InProgress)
             {
                 auto.Status = AutoStatus.InService;
                 AutoR.Update(auto);
@@ -49,15 +57,51 @@ namespace business_logic.Services
             }
         }
 
+        public async Task Update(EditRouteModel model)
+        {
+            var route = routeR.GetById(model.Id);
+            if (route == null) throw new KeyNotFoundException("Route not found");
+
+            if (!IsAutoAvailable(model.AutoId, route.DepartureTime, route.ArrivalTime, model.Id))
+                throw new InvalidOperationException("Новий автомобіль вже зайнятий у цей час.");
+
+            if (!IsDriverAvailable(model.DriverId, route.DepartureTime, route.ArrivalTime, model.Id))
+                throw new InvalidOperationException("Новий водій вже зайнятий у цей час.");
+
+            int oldAutoId = route.AutoId; 
+            var oldStatus = route.Status;
+
+            _mapper.Map(model, route);
+
+            if (oldAutoId != route.AutoId)
+            {
+                var oldAuto = AutoR.GetById(oldAutoId);
+                if (oldAuto != null && oldStatus == RouteStatus.InProgress)
+                {
+                    oldAuto.Status = AutoStatus.Available; 
+                    AutoR.Update(oldAuto);
+                }
+            }
+
+            var currentAuto = AutoR.GetById(route.AutoId);
+            if (currentAuto != null)
+            {
+                if (route.Status == RouteStatus.InProgress) currentAuto.Status = AutoStatus.InService;
+                else if (route.Status == RouteStatus.Completed || route.Status == RouteStatus.Cancelled) currentAuto.Status = AutoStatus.Available;
+                AutoR.Update(currentAuto);
+            }
+
+            routeR.Update(route);
+            routeR.Save();
+            AutoR.Save(); 
+        }
+
         public async Task Delete(int id)
         {
             var route = routeR.GetById(id);
-            if (route == null)
-            {
-                throw new KeyNotFoundException("Route not found");
-            }
+            if (route == null) throw new KeyNotFoundException("Route not found");
 
-            if (route.Status == RouteStatus.InProgress || route.Status == RouteStatus.Planned)
+            if (route.Status == RouteStatus.InProgress)
             {
                 var auto = AutoR.GetById(route.AutoId);
                 if (auto != null)
@@ -75,50 +119,13 @@ namespace business_logic.Services
         public async Task<RouteDTO> Get(int id)
         {
             var route = await routeR.GetItemBySpec(new RouteSpecs.ById(id));
-
             if (route == null) throw new Exception("Route not found");
-
             return _mapper.Map<RouteDTO>(route);
         }
 
         public IEnumerable<RouteDTO> GetAll()
         {
-            var routes = routeR.GetAll();
-            return _mapper.Map<IEnumerable<RouteDTO>>(routes);
-        }
-
-        public async Task Update(EditRouteModel model)
-        {
-            var route = routeR.GetById(model.Id);
-            if (route == null)
-            {
-                throw new KeyNotFoundException("Route not found");
-            }
-
-            var oldStatus = route.Status;
-            _mapper.Map(model, route);
-
-            if (oldStatus != route.Status)
-            {
-                var auto = AutoR.GetById(route.AutoId);
-                if (auto != null)
-                {
-                    if (route.Status == RouteStatus.InProgress || route.Status == RouteStatus.Planned)
-                    {
-                        auto.Status = AutoStatus.InService;
-                        AutoR.Update(auto);
-                        AutoR.Save();
-                    }
-                    else if (route.Status == RouteStatus.Completed || route.Status == RouteStatus.Cancelled)
-                    {
-                        auto.Status = AutoStatus.Available;
-                        AutoR.Update(auto);
-                        AutoR.Save();
-                    }
-                }
-            }
-            routeR.Update(route);
-            routeR.Save();
+            return _mapper.Map<IEnumerable<RouteDTO>>(routeR.GetAll());
         }
     }
 }

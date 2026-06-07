@@ -12,5 +12,6 @@ namespace business_logic.Entities
         public DateTime ServiceDate { get; set; }
         public int AutoId { get; set; }
         public Auto Auto { get; set; }
+        public bool IsCompleted { get; set; } = false;
     }
 }

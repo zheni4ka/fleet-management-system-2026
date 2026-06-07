@@ -27,7 +27,7 @@ namespace data_access.Configs
             builder.HasMany(a => a.Routes)
                 .WithOne(r => r.Auto)
                 .HasForeignKey(r => r.AutoId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(a => a.Services)
                 .WithOne(s => s.Auto)
