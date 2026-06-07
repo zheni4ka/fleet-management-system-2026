@@ -11,6 +11,6 @@ namespace business_logic.DTOs
         public string Description { get; set; }
         public DateTime ServiceDate { get; set; }
         public int AutoId { get; set; }
-        public bool IsCompleted { get; internal set; }
+        public bool IsCompleted { get; set; }
     }
 }
