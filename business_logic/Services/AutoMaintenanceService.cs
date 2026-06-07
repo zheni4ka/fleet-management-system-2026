@@ -109,18 +109,7 @@ namespace business_logic.Services
 
         public IEnumerable<AutoMaintenanceDTO> GetAll() { return _mapper.Map<IEnumerable<AutoMaintenanceDTO>>(_amR.GetAll()); }
 
-        public async Task Update(EditAutoMaintenanceModel model)
-        {
-            var service = _amR.GetById(model.Id);
-            if (service == null)
-            {
-                throw new KeyNotFoundException("Record not found");
-            }
-            _mapper.Map(model, service);
-            _amR.Update(service);
-            _amR.Save();
-        }
-
+    
 
     }
 }

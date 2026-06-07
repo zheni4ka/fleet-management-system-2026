@@ -38,6 +38,10 @@ namespace transport_logistic_management_2026
                 });
             });
 
+            builder.Services.AddProblemDetails();
+            builder.Services.AddExceptionHandler<Middlewares.GlobalExceptionHandler>();
+
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -47,6 +51,8 @@ namespace transport_logistic_management_2026
             }
 
             app.UseHttpsRedirection();
+
+            app.UseExceptionHandler();
 
             app.UseCors("AllowNextJS");
 
