@@ -31,7 +31,7 @@ namespace transport_logistic_management_2026.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+                
             var user = await _userManager.FindByNameAsync(request.Username)
                         ?? await _userManager.FindByEmailAsync(request.Username);
 
@@ -117,18 +117,19 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpGet("all")]
-        [Authorize(Roles = "Admin")] 
-        public IActionResult GetAllUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUsers()
         {
-            // Отримуємо всіх користувачів
-            var users = _userManager.Users.Select(u => new
+            var dispatchers = await _userManager.GetUsersInRoleAsync("Dispatcher");
+
+            var result = dispatchers.Select(u => new
             {
                 Id = u.Id,
                 Username = u.UserName,
                 Email = u.Email
             }).ToList();
 
-            return Ok(users);
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
