@@ -20,8 +20,8 @@ namespace business_logic.Validators
                 .WithMessage("Maintenance description is required.");
 
             RuleFor(x => x.ServiceDate)
-                .LessThanOrEqualTo(System.DateTime.UtcNow)
-                .WithMessage("Service date cannot be in the future.");
+                .GreaterThanOrEqualTo(System.DateTime.UtcNow)
+                .WithMessage("Service date cannot be in the past.");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using business_logic.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -80,6 +81,7 @@ namespace transport_logistic_management_2026.Controllers
 
 
         [HttpPost("register")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             if (!ModelState.IsValid)
@@ -112,6 +114,43 @@ namespace transport_logistic_management_2026.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet("all")]
+        [Authorize(Roles = "Admin")] 
+        public IActionResult GetAllUsers()
+        {
+            // Отримуємо всіх користувачів
+            var users = _userManager.Users.Select(u => new
+            {
+                Id = u.Id,
+                Username = u.UserName,
+                Email = u.Email
+            }).ToList();
+
+            return Ok(users);
+        }
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId == id) return BadRequest("You cannot delete your acc");
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                return BadRequest("Error deleting user");
+            }
+
+            return Ok(new { message = "User deleted successfully" });
         }
 
     }

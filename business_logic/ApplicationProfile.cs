@@ -19,6 +19,8 @@ namespace business_logic
 
             CreateMap<Route, RouteDTO>().ReverseMap();
             CreateMap<Route, CreateRouteModel>().ReverseMap();
+            CreateMap<Route, EditRouteModel>().ReverseMap();
+
             CreateMap<Location, LocationDTO>().ReverseMap();
             CreateMap<Location, CreateLocationModel>().ReverseMap();
             CreateMap<AutoMaintenance, AutoMaintenanceDTO>().ReverseMap();
