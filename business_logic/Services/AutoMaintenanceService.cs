@@ -45,26 +45,36 @@ namespace business_logic.Services
             }
         }
 
-        public void Create(CreateAutoMaintenanceModel driverModel)
+        public void Create(CreateAutoMaintenanceModel model)
         {
-            var auto = _autoR.GetById(driverModel.AutoId);
-            if (auto != null && auto.Status == AutoStatus.InService)
+            var auto = _autoR.GetById(model.AutoId);
+            if (auto == null)
             {
-                auto.Status = AutoStatus.InService;
+                throw new KeyNotFoundException("Автомобіль не знайдено");
+            }
+            var affectedRoutes = _routeR.GetAll()
+                .Where(r => r.AutoId == model.AutoId &&
+                           (r.Status == RouteStatus.Planned || r.Status == RouteStatus.InProgress) &&
+                           r.DepartureTime >= model.ServiceDate)
+                .ToList();
+
+            foreach (var route in affectedRoutes)
+            {
+                route.Status = RouteStatus.Cancelled;
+                _routeR.Update(route);
             }
 
-
-
-            var service = _mapper.Map<AutoMaintenance>(driverModel);
+            if (affectedRoutes.Any())
+            {
+                _routeR.Save();
+            }
+            var service = _mapper.Map<AutoMaintenance>(model);
             _amR.Insert(service);
             _amR.Save();
 
-            if (auto != null)
-            {
-                auto.Status = AutoStatus.UnderMaintenance;
-                _autoR.Update(auto);
-                _autoR.Save();
-            }
+            auto.Status = AutoStatus.UnderMaintenance;
+            _autoR.Update(auto);
+            _autoR.Save();
 
             _mapper.Map<AutoMaintenanceDTO>(service);
         }

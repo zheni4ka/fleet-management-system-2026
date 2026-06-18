@@ -8,43 +8,45 @@ namespace business_logic.Services
 {
     public class AutoService : IAutoService
     {
-        private readonly IRepository<Auto> autoR;
+        private readonly IRepository<Auto> _autoR;
+        private readonly IAuditLogService _auditLogService;
         private readonly IMapper _mapper;
         public AutoService(IRepository<Auto> autoR, IMapper mapper)
         {
-            this.autoR = autoR;
+            this._autoR = autoR;
             this._mapper = mapper;
         }
 
         public void Create(CreateAutoModel autoModel)
         {
-            autoR.Insert(_mapper.Map<Auto>(autoModel));
-            autoR.Save();
+            _autoR.Insert(_mapper.Map<Auto>(autoModel));
+            _autoR.Save();
         }
 
         public async Task Delete(int id)
         {
-            var auto = autoR.GetById(id);
+            var auto = _autoR.GetById(id);
+
             if (auto == null)
             {
                 throw new Exception("Auto not found");
             }
-            autoR.Delete(auto);
-            autoR.Save();
+            _autoR.Delete(auto);
+            _autoR.Save();
         }
 
         public async Task Edit(EditAutoModel model)
         {
-            var auto = autoR.GetById(model.Id);
+            var auto = _autoR.GetById(model.Id);
             if (auto == null) throw new KeyNotFoundException("Auto not found");
             _mapper.Map(model, auto);
-            autoR.Update(auto);
-            autoR.Save();
+            _autoR.Update(auto);
+            _autoR.Save();
         }
 
         public async Task<AutoDTO> Get(int id)
         {
-            var auto = await autoR.GetItemBySpec(new AutoSpecs.ById(id));
+            var auto = await _autoR.GetItemBySpec(new AutoSpecs.ById(id));
 
             if (auto == null) throw new Exception("Auto not found");
 
@@ -53,21 +55,21 @@ namespace business_logic.Services
 
         public IEnumerable<AutoDTO> GetAll()
         {
-            var autos = autoR.GetAll();
+            var autos = _autoR.GetAll();
             return _mapper.Map<IEnumerable<AutoDTO>>(autos);
         }
 
         public async Task UpdateStatus(int autoId, AutoStatus newStatus)
         {
-            var auto = autoR.GetById(autoId);
+            var auto = _autoR.GetById(autoId);
             if(auto == null)
             {
                 throw new Exception("Auto not found");
             }
             auto.Status = newStatus;
 
-            autoR.Update(auto);
-            autoR.Save();
+            _autoR.Update(auto);
+            _autoR.Save();
         }
     }
 }

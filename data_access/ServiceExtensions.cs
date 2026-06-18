@@ -3,6 +3,7 @@ using data_access.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using data_access.data;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 
 namespace data_access

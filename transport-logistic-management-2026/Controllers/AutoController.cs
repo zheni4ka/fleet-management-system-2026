@@ -4,6 +4,7 @@ using business_logic.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace transport_logistic_management_2026.Controllers
 {
@@ -12,6 +13,7 @@ namespace transport_logistic_management_2026.Controllers
     public class AutoController : Controller
     {
         private readonly IAutoService _autoService;
+        private readonly IAuditLogService _auditLogService;
         private readonly IValidator<CreateAutoModel> _createValidator;
         private readonly IValidator<EditAutoModel> _editValidator;
 
@@ -23,9 +25,11 @@ namespace transport_logistic_management_2026.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Create([FromBody] CreateAutoModel auto)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var validationResult = _createValidator.Validate(auto);
             if (!validationResult.IsValid)
             {
@@ -37,8 +41,9 @@ namespace transport_logistic_management_2026.Controllers
                 };
                 return BadRequest(errors);
             }
-
             _autoService.Create(auto);
+            _auditLogService.LogAction(currentUserId, "Created Auto");
+
             return Ok();
         }
 

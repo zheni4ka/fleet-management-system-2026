@@ -5,6 +5,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace transport_logistic_management_2026.Controllers
 {
@@ -30,6 +31,8 @@ namespace transport_logistic_management_2026.Controllers
         [Authorize(Roles = "Admin,Dispatcher")]
         public IActionResult Create([FromBody] CreateRouteModel model)
         {
+            var dispatcherId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var validationResult = _createValidator.Validate(model);
             if (!validationResult.IsValid)
             {
@@ -43,7 +46,7 @@ namespace transport_logistic_management_2026.Controllers
                 return BadRequest(errors);
             }
 
-            _routeService.Create(model);
+            _routeService.Create(model, dispatcherId);
             return Ok();
         }
 
@@ -51,7 +54,8 @@ namespace transport_logistic_management_2026.Controllers
         [Authorize(Roles = "Admin,Dispatcher")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            await _routeService.Delete(id);
+            var dispatcherId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _routeService.Delete(id, dispatcherId);
             return Ok();
         }
 

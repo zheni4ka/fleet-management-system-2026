@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using business_logic.DTOs;
+using business_logic.DTOs.AuditLogs;
 using business_logic.Entities;
 using business_logic.Interfaces;
 using business_logic.Specifications;
+using System.Globalization;
 
 namespace business_logic.Services
 {
@@ -10,6 +12,7 @@ namespace business_logic.Services
     {
         private readonly IRepository<Route> routeR;
         private readonly IRepository<Auto> AutoR;
+        private readonly IRepository<AuditLog> AuditLogR;
         private readonly IMapper _mapper;
 
         public RouteService(IRepository<Route> routeR, IRepository<Auto> autoR, IMapper mapper)
@@ -22,6 +25,7 @@ namespace business_logic.Services
         private bool IsAutoAvailable(int autoId, DateTime departure, DateTime arrival, int? excludeRouteId = null)
         {
             var routes = routeR.GetAll().Where(r => r.AutoId == autoId && r.Status != RouteStatus.Cancelled && r.Status != RouteStatus.Completed);
+        
             if (excludeRouteId.HasValue) routes = routes.Where(r => r.Id != excludeRouteId.Value);
             return !routes.Any(r => r.DepartureTime < arrival && r.ArrivalTime > departure);
         }
@@ -29,11 +33,12 @@ namespace business_logic.Services
         private bool IsDriverAvailable(int driverId, DateTime departure, DateTime arrival, int? excludeRouteId = null)
         {
             var routes = routeR.GetAll().Where(r => r.DriverId == driverId && r.Status != RouteStatus.Cancelled && r.Status != RouteStatus.Completed);
+
             if (excludeRouteId.HasValue) routes = routes.Where(r => r.Id != excludeRouteId.Value);
             return !routes.Any(r => r.DepartureTime < arrival && r.ArrivalTime > departure);
         }
 
-        public void Create(CreateRouteModel routeModel)
+        public void Create(CreateRouteModel routeModel, string dispatcherId)
         {
             var auto = AutoR.GetById(routeModel.AutoId);
             if (auto == null) throw new KeyNotFoundException("Auto not found");
@@ -44,6 +49,7 @@ namespace business_logic.Services
 
             if (!IsDriverAvailable(routeModel.DriverId, routeModel.DepartureTime, routeModel.ArrivalTime))
                 throw new InvalidOperationException("Водій вже зайнятий на іншому рейсі у цей час.");
+
 
             var route = _mapper.Map<Route>(routeModel);
             routeR.Insert(route);
@@ -63,10 +69,10 @@ namespace business_logic.Services
             if (route == null) throw new KeyNotFoundException("Route not found");
 
             if (!IsAutoAvailable(model.AutoId, route.DepartureTime, route.ArrivalTime, model.Id))
-                throw new InvalidOperationException("Новий автомобіль вже зайнятий у цей час.");
+                throw new InvalidOperationException("New auto is busy at this time");
 
             if (!IsDriverAvailable(model.DriverId, route.DepartureTime, route.ArrivalTime, model.Id))
-                throw new InvalidOperationException("Новий водій вже зайнятий у цей час.");
+                throw new InvalidOperationException("New driver is busy at this time");
 
             int oldAutoId = route.AutoId; 
             var oldStatus = route.Status;
@@ -96,7 +102,7 @@ namespace business_logic.Services
             AutoR.Save(); 
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, string dispatcherId)
         {
             var route = routeR.GetById(id);
             if (route == null) throw new KeyNotFoundException("Route not found");
@@ -111,6 +117,8 @@ namespace business_logic.Services
                     AutoR.Save();
                 }
             }
+
+
 
             routeR.Delete(id);
             routeR.Save();
