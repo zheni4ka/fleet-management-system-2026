@@ -13,13 +13,15 @@ namespace business_logic.Services
         private readonly IRepository<Route> routeR;
         private readonly IRepository<Auto> AutoR;
         private readonly IRepository<AuditLog> AuditLogR;
+        private readonly IAuditLogService _logService;
         private readonly IMapper _mapper;
 
-        public RouteService(IRepository<Route> routeR, IRepository<Auto> autoR, IMapper mapper)
+        public RouteService(IRepository<Route> routeR, IRepository<Auto> autoR, IMapper mapper, IAuditLogService logService)
         {
             this.routeR = routeR;
             this.AutoR = autoR;
             this._mapper = mapper;
+            _logService = logService;
         }
 
         private bool IsAutoAvailable(int autoId, DateTime departure, DateTime arrival, int? excludeRouteId = null)
@@ -61,6 +63,8 @@ namespace business_logic.Services
                 AutoR.Update(auto);
                 AutoR.Save();
             }
+
+            _logService.LogAction(dispatcherId, "Created Route");
         }
 
         public async Task Update(EditRouteModel model)
@@ -117,8 +121,6 @@ namespace business_logic.Services
                     AutoR.Save();
                 }
             }
-
-
 
             routeR.Delete(id);
             routeR.Save();

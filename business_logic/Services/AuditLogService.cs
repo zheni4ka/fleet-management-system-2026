@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using business_logic.DTOs;
-using business_logic.DTOs.AuditLog;
 using business_logic.DTOs.AuditLogs;
 using business_logic.Entities;
 using business_logic.Interfaces;
@@ -16,6 +15,13 @@ namespace business_logic.Services
     {
         private readonly IRepository<AuditLog> _auditLogR;
         private readonly IMapper _mapper;
+
+        public AuditLogService(IRepository<AuditLog> auditLogR, IMapper mapper)
+        {
+            this._auditLogR = auditLogR;
+            this._mapper = mapper;
+        }
+
         public void LogAction(string dispatcherId, string Action)
         {
             CreateAuditLogModel log = new CreateAuditLogModel()
@@ -30,6 +36,7 @@ namespace business_logic.Services
 
         public void ClearLog()
         {
+            //
         }
 
         public IEnumerable<AuditLogDTO> GetLogs()

@@ -27,6 +27,7 @@ namespace business_logic
             services.AddScoped<IRouteService, RouteService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IAutoMaintenanceService, AutoMaintenanceService>();
+            services.AddScoped<IAuditLogService, AuditLogService>();
         }
     }
 }

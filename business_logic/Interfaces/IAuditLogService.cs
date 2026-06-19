@@ -1,4 +1,4 @@
-﻿using business_logic.DTOs.AuditLog;
+﻿using business_logic.DTOs;
 using business_logic.DTOs.AuditLogs;
 using System;
 using System.Collections.Generic;

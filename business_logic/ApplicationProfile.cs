@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using business_logic.Entities;
 using business_logic.DTOs;
+using business_logic.DTOs.AuditLogs;
 
 namespace business_logic
 {
@@ -25,6 +26,9 @@ namespace business_logic
             CreateMap<Location, CreateLocationModel>().ReverseMap();
             CreateMap<AutoMaintenance, AutoMaintenanceDTO>().ReverseMap();
             CreateMap<AutoMaintenance, CreateAutoMaintenanceModel>().ReverseMap();
+
+            CreateMap<AuditLog, AuditLogDTO>().ReverseMap();
+            CreateMap<AuditLog, CreateAuditLogModel>().ReverseMap();
         }
     }
 }
